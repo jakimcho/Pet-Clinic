@@ -6,7 +6,7 @@ public interface CrudService<T, ID> {
 
     Set<T> findAll();
 
-    T find(ID id);
+    T findById(ID id);
 
     T save(T object);
 
