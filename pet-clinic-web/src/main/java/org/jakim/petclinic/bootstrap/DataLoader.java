@@ -4,8 +4,6 @@ import org.jakim.petclinic.model.Owner;
 import org.jakim.petclinic.model.Vet;
 import org.jakim.petclinic.services.OwnerService;
 import org.jakim.petclinic.services.VetService;
-import org.jakim.petclinic.services.map.OwnerMapService;
-import org.jakim.petclinic.services.map.VetMapService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +14,11 @@ public class DataLoader
     private final OwnerService ownerService;
     private final VetService vetService;
 
-    public DataLoader( )
+    public DataLoader( OwnerService ownerService,
+                       VetService vetService )
     {
-        ownerService = new OwnerMapService( );
-        vetService = new VetMapService( );
+        this.ownerService = ownerService;
+        this.vetService = vetService;
     }
 
     @Override
@@ -32,14 +31,14 @@ public class DataLoader
         owner1.setId( 1L );
 
         Owner owner2 = new Owner( );
-        owner1.setFirstName( "Jordanka" );
-        owner1.setLastName( "Fandukova" );
-        owner1.setId( 2L );
+        owner2.setFirstName( "Jordanka" );
+        owner2.setLastName( "Fandukova" );
+        owner2.setId( 2L );
 
         Owner owner3 = new Owner( );
-        owner1.setFirstName( "Bojko" );
-        owner1.setLastName( "Borisov" );
-        owner1.setId( 3L );
+        owner3.setFirstName( "Bojko" );
+        owner3.setLastName( "Borisov" );
+        owner3.setId( 3L );
 
         ownerService.save( owner1 );
         ownerService.save( owner2 );
@@ -55,7 +54,7 @@ public class DataLoader
         Vet vet2 = new Vet( );
         vet2.setFirstName( "Dimitar" );
         vet2.setLastName( "Georgiev" );
-        vet2.setId( 1L );
+        vet2.setId( 2L );
 
         vetService.save( vet1 );
         vetService.save( vet2 );
