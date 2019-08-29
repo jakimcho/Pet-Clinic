@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+<!-- /*@thymesVar id="onwer" type="org.jakim.petclinic.model.Owner.java"*/-->
 <h1 th:text="'List of Owners Page'">List of Owners Page</h1>
 <table>
     <thead>
@@ -18,8 +19,8 @@
     <th:block th:each="owner : ${owners}">
         <tr>
             <td th:text="${owner.id}">1</td>
-            <td th:text="${owner.firstName}">...</td>
-            <td th:text="${owner.lastName}">...</td>
+            <td th:text="${owner.firstName}">Demo</td>
+            <td th:text="${owner.lastName}">Demov</td>
         </tr>
     </th:block>
     </tbody>

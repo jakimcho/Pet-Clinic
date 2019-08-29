@@ -2,6 +2,8 @@ package org.jakim.petclinic.services.map;
 
 import org.jakim.petclinic.model.Owner;
 import org.jakim.petclinic.services.OwnerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
