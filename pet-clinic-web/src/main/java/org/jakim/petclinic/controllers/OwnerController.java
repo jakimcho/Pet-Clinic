@@ -1,15 +1,16 @@
 package org.jakim.petclinic.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/owners")
+@RequestMapping( "/owners" )
 @Controller
-public class OwnerController {
-
-    @RequestMapping({"/", ""})
-    public String listOwners(){
-
+public class OwnerController
+{
+    @RequestMapping( { "/", "" } )
+    public String listOwners( Model model )
+    {
         return "/owners/index";
     }
 }
