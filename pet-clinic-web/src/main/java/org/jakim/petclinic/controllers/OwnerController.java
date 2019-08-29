@@ -28,7 +28,7 @@ public class OwnerController
     {
         LOGGER.info( "Inside listOwners method" );
         Set<Owner> owners = ownerService.findAll( );
-        LOGGER.info( "Adding {} to the model",
+        LOGGER.info( "Adding owners {} to the model",
                      owners.stream( )
                            .map( Object::toString )
                            .collect( Collectors.joining( ", " ) ) );
