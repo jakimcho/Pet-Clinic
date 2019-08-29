@@ -28,17 +28,14 @@ public class DataLoader
         Owner owner1 = new Owner( );
         owner1.setFirstName( "Ivan" );
         owner1.setLastName( "Ivanov" );
-        owner1.setId( 1L );
 
         Owner owner2 = new Owner( );
         owner2.setFirstName( "Jordanka" );
         owner2.setLastName( "Fandukova" );
-        owner2.setId( 2L );
 
         Owner owner3 = new Owner( );
         owner3.setFirstName( "Bojko" );
         owner3.setLastName( "Borisov" );
-        owner3.setId( 3L );
 
         ownerService.save( owner1 );
         ownerService.save( owner2 );
@@ -49,12 +46,10 @@ public class DataLoader
         Vet vet1 = new Vet( );
         vet1.setFirstName( "Ginka" );
         vet1.setLastName( "Kerkez" );
-        vet1.setId( 1L );
 
         Vet vet2 = new Vet( );
         vet2.setFirstName( "Dimitar" );
         vet2.setLastName( "Georgiev" );
-        vet2.setId( 2L );
 
         vetService.save( vet1 );
         vetService.save( vet2 );

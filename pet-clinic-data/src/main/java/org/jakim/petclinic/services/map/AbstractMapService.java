@@ -1,17 +1,15 @@
 package org.jakim.petclinic.services.map;
 
+import org.jakim.petclinic.model.BaseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public abstract class AbstractMapService<T, ID>
+public abstract class AbstractMapService<T extends BaseEntity, ID extends Long>
 {
 
-    protected Map<ID, T> map = new HashMap<>( );
+    protected Map<Long, T> map = new HashMap<>( );
     protected Logger LOGGER = LoggerFactory.getLogger( this.getClass( )
                                                            .getName( ) );
 
@@ -30,18 +28,27 @@ public abstract class AbstractMapService<T, ID>
         return map.get( id );
     }
 
-    T save( ID id,
-            T object )
+    T save( T object )
     {
         LOGGER.info( "Inside save() method" );
+        if( object == null )
+        {
+            throw new RuntimeException( "Cannot persist object null" );
+        }
+
+        if( object.getId( ) == null )
+        {
+            object.setId( getNextId( ) );
+        }
+
         LOGGER.info( "Persisting {}: {}",
                      object.getClass( )
                            .getSimpleName( ),
                      object );
-        map.put( id,
+        map.put( object.getId( ),
                  object );
         LOGGER.info( "Exiting save() method" );
-        return map.get( id );
+        return object;
     }
 
     void deleteById( ID id )
@@ -54,6 +61,13 @@ public abstract class AbstractMapService<T, ID>
         map.entrySet( )
            .removeIf( entry->entry.getValue( )
                                   .equals( object ) );
+    }
+
+    private Long getNextId( )
+    {
+        return map.isEmpty( )
+               ? 1L
+               : Collections.max( map.keySet( ) ) + 1;
     }
 
 }
