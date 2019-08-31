@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home')}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,6 +7,13 @@
 <body>
     <!-- /*@thymesVar id="onwer" type="org.jakim.petclinic.model.Owner"*/-->
 <h1 th:text="'List of Owners Page 123'">List of Owners Page</h1>
+
+    <h2 th:text="#{welcome}">Welcome</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}"/>
+        </div>
+    </div>
 <table>
     <thead>
     <tr>
