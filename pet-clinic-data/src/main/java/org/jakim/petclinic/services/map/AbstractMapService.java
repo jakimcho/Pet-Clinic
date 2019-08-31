@@ -9,8 +9,8 @@ import java.util.*;
 public abstract class AbstractMapService<T extends BaseEntity, ID extends Long>
 {
 
-    protected Map<Long, T> map = new HashMap<>( );
-    protected Logger LOGGER = LoggerFactory.getLogger( this.getClass( )
+    private Map<Long, T> map = new HashMap<>( );
+    private Logger LOGGER = LoggerFactory.getLogger( this.getClass( )
                                                            .getName( ) );
 
     Set<T> findAll( )
