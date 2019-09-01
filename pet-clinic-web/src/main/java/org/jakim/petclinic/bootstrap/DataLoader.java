@@ -1,9 +1,6 @@
 package org.jakim.petclinic.bootstrap;
 
-import org.jakim.petclinic.model.Owner;
-import org.jakim.petclinic.model.Pet;
-import org.jakim.petclinic.model.PetType;
-import org.jakim.petclinic.model.Vet;
+import org.jakim.petclinic.model.*;
 import org.jakim.petclinic.services.OwnerService;
 import org.jakim.petclinic.services.PetTypeService;
 import org.jakim.petclinic.services.VetService;
@@ -102,13 +99,31 @@ public class DataLoader
 
         System.out.println( "Loaded Owners...." );
 
+        Specialty specialty1 = new Specialty();
+        specialty1.setDescription( "Bones" );
+
+        Specialty specialty2 = new Specialty();
+        specialty2.setDescription( "General" );
+
+        Specialty specialty3 = new Specialty();
+        specialty3.setDescription( "Derma" );
+
+        Specialty specialty4 = new Specialty();
+        specialty4.setDescription( "Parasites" );
+
+
         Vet vet1 = new Vet( );
         vet1.setFirstName( "Ginka" );
         vet1.setLastName( "Kerkez" );
+        vet1.getSpecialties().add( specialty1 );
+        vet1.getSpecialties().add( specialty3 );
 
         Vet vet2 = new Vet( );
         vet2.setFirstName( "Dimitar" );
         vet2.setLastName( "Georgiev" );
+        vet2.getSpecialties().add( specialty1 );
+        vet2.getSpecialties().add( specialty2 );
+        vet2.getSpecialties().add( specialty4 );
 
         vetService.save( vet1 );
         vetService.save( vet2 );

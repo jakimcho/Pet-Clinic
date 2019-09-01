@@ -1,37 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"  th:replace="~{fragments/layout :: layout (~{::body},'vets')}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'vets')}">
 <head>
     <meta charset="UTF-8">
     <title>Vets</title>
 </head>
 <body>
 <!-- /*@thymesVar id="vet" type="org.jakim.petclinic.model.Vet"*/-->
-    <h1 th:text="'List of Vets'">Lists of Vets ...</h1>
+<h1 th:text="'List of Vets'">Lists of Vets ...</h1>
 
-    <div class="row">
-        <div class="col-md-12">
-            <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}"/>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}"/>
     </div>
+</div>
 
-    <table id="vets" class="table table-striped">
-        <thead>
+<table id="vets" class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Specialties</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="vet : ${vets}">
         <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <td th:text="${vet.id}">1</td>
+            <td th:text="${vet.firstName}">Demo</td>
+            <td th:text="${vet.lastName}">Demov</td>
+            <td>
+                <th:block th:if="${!vet.specialties.isEmpty()}">
+                    <table>
+                        <th:block th:each="specialty : ${vet.specialties}">
+                            <tr>
+                                <td th:text="${specialty.id}">Куче</td>
+                                <td>&nbsp;</td>
+                                <td th:text="${specialty.description}">42343</td>
+                            </tr>
+                        </th:block>
+                    </table>
+                </th:block>
+            </td>
         </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="vet : ${vets}">
-            <tr>
-                <td th:text="${vet.id}">1</td>
-                <td th:text="${vet.firstName}">Demo</td>
-                <td th:text="${vet.lastName}">Demov</td>
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
+    </th:block>
+    </tbody>
+</table>
 
 </body>
 </html>

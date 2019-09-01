@@ -1,6 +1,8 @@
 package org.jakim.petclinic.services.map;
 
+import org.jakim.petclinic.model.Specialty;
 import org.jakim.petclinic.model.Vet;
+import org.jakim.petclinic.services.SpecialtiesService;
 import org.jakim.petclinic.services.VetService;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,13 @@ public class VetMapService
         extends AbstractMapService<Vet, Long>
         implements VetService
 {
+    private final SpecialtiesService specialtiesService;
+
+    public VetMapService( SpecialtiesService specialtiesService )
+    {
+        this.specialtiesService = specialtiesService;
+    }
+
     @Override
     public Set<Vet> findAll( )
     {
@@ -38,6 +47,31 @@ public class VetMapService
     @Override
     public Vet save( Vet object )
     {
+        if( object == null )
+        {
+            throw new RuntimeException( "Vet is null" );
+        }
+
+        if( object.getSpecialties( ) == null )
+        {
+            throw new RuntimeException( "What vet has no idea of vet specialties" );
+        }
+
+        object.getSpecialties( )
+              .forEach( this::persistSpecialty );
         return super.save( object );
+    }
+
+    private void persistSpecialty( Specialty specialty )
+    {
+        if( specialty == null )
+        {
+            throw new RuntimeException( "Specialty cannot be null" );
+        }
+
+        if( specialty.getId( ) == null )
+        {
+            specialtiesService.save( specialty );
+        }
     }
 }
