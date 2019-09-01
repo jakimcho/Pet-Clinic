@@ -1,9 +1,8 @@
 package org.jakim.petclinic.model;
 
-public class Person
+public abstract class Person
         extends BaseEntity
 {
-
     private String firstName;
     private String lastName;
 
