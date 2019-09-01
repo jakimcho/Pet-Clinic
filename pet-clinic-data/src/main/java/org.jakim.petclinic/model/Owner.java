@@ -1,8 +1,11 @@
 package org.jakim.petclinic.model;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class Owner extends Person {
+public class Owner
+        extends Person
+{
 
     private String address;
     private String city;
@@ -47,5 +50,13 @@ public class Owner extends Person {
     public void setPets( Set<Pet> pets )
     {
         this.pets = pets;
+    }
+
+    @Override
+    public String toString( )
+    {
+        return super.toString( ) + "Pets: " + pets.stream( )
+                                                  .map( Pet::toString )
+                                                  .collect( Collectors.joining( ", " ) );
     }
 }
