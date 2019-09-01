@@ -1,8 +1,10 @@
 package org.jakim.petclinic.bootstrap;
 
 import org.jakim.petclinic.model.Owner;
+import org.jakim.petclinic.model.PetType;
 import org.jakim.petclinic.model.Vet;
 import org.jakim.petclinic.services.OwnerService;
+import org.jakim.petclinic.services.PetTypeService;
 import org.jakim.petclinic.services.VetService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,17 +16,29 @@ public class DataLoader
     private final OwnerService ownerService;
     private final VetService vetService;
 
+    private final PetTypeService petTypeService;
+
     public DataLoader( OwnerService ownerService,
-                       VetService vetService )
+                       VetService vetService,
+                       PetTypeService petTypeService )
     {
         this.ownerService = ownerService;
         this.vetService = vetService;
+        this.petTypeService = petTypeService;
     }
 
     @Override
     public void run( String... args )
             throws Exception
     {
+        PetType petType1 = new PetType( );
+        petType1.setName( "Dog" );
+        petTypeService.save( petType1 );
+
+        PetType petType2 = new PetType( );
+        petType2.setName( "Cat" );
+        petTypeService.save( petType2 );
+
         Owner owner1 = new Owner( );
         owner1.setFirstName( "Ivan" );
         owner1.setLastName( "Ivanov" );
