@@ -2,7 +2,6 @@ package org.jakim.petclinic.model;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
@@ -48,15 +47,5 @@ public class Pet
     public void setBirthDate( LocalDate birthDate )
     {
         this.birthDate = birthDate;
-    }
-
-    @Override
-    public String toString( )
-    {
-        return "Pet{" +
-               "petType=" + petType.getName( ) +
-               ", owner=" + owner +
-               ", birthDate=" + birthDate +
-               '}';
     }
 }

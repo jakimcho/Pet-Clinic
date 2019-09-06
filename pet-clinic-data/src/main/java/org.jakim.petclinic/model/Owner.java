@@ -61,11 +61,4 @@ public class Owner
         this.pets = pets;
     }
 
-    @Override
-    public String toString( )
-    {
-        return super.toString( ) + "Pets: " + pets.stream( )
-                                                  .map( Pet::toString )
-                                                  .collect( Collectors.joining( ", " ) );
-    }
 }
