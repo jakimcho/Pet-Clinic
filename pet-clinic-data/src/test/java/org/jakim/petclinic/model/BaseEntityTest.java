@@ -6,8 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-@Ignore
-public class BaseEntityTest<T extends BaseEntity>
+public abstract class BaseEntityTest<T extends BaseEntity>
 {
     protected T entity;
 

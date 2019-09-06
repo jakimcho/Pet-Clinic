@@ -1,13 +1,10 @@
 package org.jakim.petclinic.model;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
-@Ignore
-public class PersonTest<T extends Person>
+public abstract class PersonTest<T extends Person>
         extends BaseEntityTest<T>
 {
 

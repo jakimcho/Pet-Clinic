@@ -35,7 +35,7 @@ public class VetTest
         this.entity.setSpecialties( specialties );
 
         assertThat( entity.getSpecialties( ) ).hasSize( 2 );
-        assertThat( entity.getSpecialties( ) ).containsExactly( s1,
-                                                                s2 );
+        assertThat( entity.getSpecialties( ) ).containsExactlyInAnyOrder( s1,
+                                                                          s2 );
     }
 }
