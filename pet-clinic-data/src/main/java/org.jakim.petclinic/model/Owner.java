@@ -1,16 +1,25 @@
 package org.jakim.petclinic.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Entity
 public class Owner
         extends Person
 {
-
     private String address;
+
     private String city;
+
     private String telephone;
-    private Set<Pet> pets;
+
+    @OneToMany( cascade = CascadeType.ALL,
+                mappedBy = "owner" )
+    private Set<Pet> pets = new HashSet<>( );
 
     public String getAddress( )
     {

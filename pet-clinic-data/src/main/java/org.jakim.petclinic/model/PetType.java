@@ -1,14 +1,22 @@
 package org.jakim.petclinic.model;
 
-public class PetType extends BaseEntity {
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+@Entity
+@Table( name = "types" )
+public class PetType
+        extends BaseEntity
+{
     private String name;
 
-    public String getName() {
+    public String getName( )
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName( String name )
+    {
         this.name = name;
     }
 }

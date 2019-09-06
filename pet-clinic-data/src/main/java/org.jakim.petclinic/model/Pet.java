@@ -1,12 +1,22 @@
 package org.jakim.petclinic.model;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
+@Entity
 public class Pet
         extends BaseEntity
 {
 
+    @ManyToOne
+    @JoinColumn( name = "type_id" )
     private PetType petType;
+
+    @ManyToOne
+    @JoinColumn( name = "owner_id" )
     private Owner owner;
     private LocalDate birthDate;
 
@@ -44,7 +54,7 @@ public class Pet
     public String toString( )
     {
         return "Pet{" +
-               "petType=" + petType.getName() +
+               "petType=" + petType.getName( ) +
                ", owner=" + owner +
                ", birthDate=" + birthDate +
                '}';

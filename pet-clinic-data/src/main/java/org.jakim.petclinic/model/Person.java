@@ -1,5 +1,8 @@
 package org.jakim.petclinic.model;
 
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class Person
         extends BaseEntity
 {
