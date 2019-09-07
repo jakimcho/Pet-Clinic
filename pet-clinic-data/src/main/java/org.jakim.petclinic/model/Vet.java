@@ -9,7 +9,7 @@ public class Vet
         extends Person
 {
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany( fetch = FetchType.EAGER )
     @JoinTable( name = "vet_specialty",
                 joinColumns = @JoinColumn( name = "vet_id" ),
                 inverseJoinColumns = @JoinColumn( name = "specialty_id" ) )
