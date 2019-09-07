@@ -1,4 +1,4 @@
-package org.jakim.petclinic.model.repositories;
+package org.jakim.petclinic.repositories;
 
 import org.jakim.petclinic.model.Owner;
 import org.springframework.data.repository.CrudRepository;
