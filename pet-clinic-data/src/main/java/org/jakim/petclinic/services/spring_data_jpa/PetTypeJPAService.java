@@ -14,12 +14,12 @@ import java.util.Set;
  */
 @Service
 @Profile( "spring_data_jpa" )
-public class PetTypeServiceJPA
+public class PetTypeJPAService
         implements PetTypeService
 {
     private final PetTypeRepository petTypeRepository;
 
-    public PetTypeServiceJPA( PetTypeRepository petTypeRepository )
+    public PetTypeJPAService( PetTypeRepository petTypeRepository )
     {
         this.petTypeRepository = petTypeRepository;
         System.out.println( "PetTypeServiceJPA loaded" );

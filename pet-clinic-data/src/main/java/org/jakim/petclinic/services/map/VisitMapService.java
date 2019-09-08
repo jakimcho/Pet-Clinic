@@ -3,6 +3,7 @@ package org.jakim.petclinic.services.map;
 import org.jakim.petclinic.model.Pet;
 import org.jakim.petclinic.model.Visit;
 import org.jakim.petclinic.services.VisitService;
+import org.jakim.petclinic.services.spring_data_jpa.VisitJPAService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,11 @@ public class VisitMapService
         extends AbstractMapService<Visit, Long>
         implements VisitService
 {
+    public VisitMapService( )
+    {
+        System.out.println( "VisitMapService loaded" );
+    }
+
     @Override
     public Set<Visit> findAll( )
     {
@@ -38,19 +44,7 @@ public class VisitMapService
     @Override
     public Visit save( final Visit visit )
     {
-        Pet pet = visit.getPet( );
-        if( pet == null || pet.getId( ) == null )
-        {
-            throw new RuntimeException( "No such pet in the data base" );
-        }
-
-        if( pet.getOwner( ) == null || pet.getOwner( )
-                                          .getId( ) == null )
-        {
-            throw new RuntimeException( "The pet is homeless" );
-        }
-
-
+        VisitJPAService.verifyVisitPet( visit );
         return super.save( visit );
     }
 

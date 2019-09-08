@@ -14,12 +14,12 @@ import java.util.Set;
  */
 @Service
 @Profile( "spring_data_jpa" )
-public class SpecialtiesServiceJPA
+public class SpecialtiesJPAService
         implements SpecialtiesService
 {
     private final SpecialtiesRepository specialtiesRepository;
 
-    public SpecialtiesServiceJPA( SpecialtiesRepository specialtiesRepository )
+    public SpecialtiesJPAService( SpecialtiesRepository specialtiesRepository )
     {
         this.specialtiesRepository = specialtiesRepository;
         System.out.println( "SpecialtiesServiceJPA loaded" );

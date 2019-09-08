@@ -15,12 +15,12 @@ import java.util.Set;
 
 @Service
 @Profile( "spring_data_jpa" )
-public class OwnerServiceJPA
+public class OwnerJPAService
         implements OwnerService
 {
     private final OwnerRepository ownerRepository;
 
-    public OwnerServiceJPA( OwnerRepository ownerRepository )
+    public OwnerJPAService( OwnerRepository ownerRepository )
     {
         this.ownerRepository = ownerRepository;
         System.out.println( "OwnerServiceJPA loaded" );
