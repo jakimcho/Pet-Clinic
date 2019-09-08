@@ -4,6 +4,7 @@ import org.jakim.petclinic.model.*;
 import org.jakim.petclinic.services.OwnerService;
 import org.jakim.petclinic.services.PetTypeService;
 import org.jakim.petclinic.services.VetService;
+import org.jakim.petclinic.services.VisitService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,16 +16,18 @@ public class DataLoader
 {
     private final OwnerService ownerService;
     private final VetService vetService;
-
+    private final VisitService visitService;
     private final PetTypeService petTypeService;
 
     public DataLoader( OwnerService ownerService,
                        VetService vetService,
-                       PetTypeService petTypeService )
+                       PetTypeService petTypeService,
+                       VisitService visitService )
     {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -110,6 +113,28 @@ public class DataLoader
         vet2.addSpecialty( specialty2 );
         vet2.addSpecialty( specialty4 );
         vetService.save( vet2 );
+
+        Visit visit1 = new Visit( );
+        visit1.setPet( pet1 );
+        visit1.setDescription( "Pain in th ass" );
+        visit1.setDate( LocalDate.now( )
+                                 .plusDays( 4 ) );
+        this.visitService.save( visit1 );
+
+        Visit visit2 = new Visit( );
+        visit2.setPet( pet2 );
+        visit2.setDescription( "Leaping cat" );
+        visit2.setDate( LocalDate.now( )
+                                 .plusDays( 2 ) );
+        this.visitService.save( visit2 );
+
+        Visit visit3 = new Visit( );
+        visit3.setPet( pet3 );
+        visit3.setDescription( "Def cat" );
+        visit3.setDate( LocalDate.now( )
+                                 .plusDays( 3 ) );
+        this.visitService.save( visit3 );
+
 
         System.out.println( "Loaded Vets...." );
     }
