@@ -11,7 +11,7 @@ public abstract class BaseEntity
         implements Serializable
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
     private Long id;
 
     public Long getId( )
@@ -22,5 +22,13 @@ public abstract class BaseEntity
     public void setId( Long id )
     {
         this.id = id;
+    }
+
+    @Override
+    public String toString( )
+    {
+        return "BaseEntity{" +
+               "id=" + id +
+               '}';
     }
 }

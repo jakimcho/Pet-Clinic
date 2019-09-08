@@ -6,11 +6,13 @@ import org.jakim.petclinic.model.PetType;
 import org.jakim.petclinic.services.OwnerService;
 import org.jakim.petclinic.services.PetService;
 import org.jakim.petclinic.services.PetTypeService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
+@Profile( { "default", "map"} )
 public class OwnerMapService
         extends AbstractMapService<Owner, Long>
         implements OwnerService
@@ -23,6 +25,7 @@ public class OwnerMapService
     {
         this.petTypeService = petTypeService;
         this.petService = petService;
+        System.out.println("OwnerMapService loaded" );
     }
 
     @Override

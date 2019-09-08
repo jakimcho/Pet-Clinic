@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 public class Owner
@@ -59,6 +58,14 @@ public class Owner
     public void setPets( Set<Pet> pets )
     {
         this.pets = pets;
+    }
+
+    public Owner addPet( final Pet pet )
+    {
+        pet.setOwner( this );
+        pets.add( pet );
+
+        return this;
     }
 
 }

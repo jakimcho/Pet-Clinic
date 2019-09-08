@@ -8,8 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class DataLoader
@@ -31,7 +29,6 @@ public class DataLoader
 
     @Override
     public void run( String... args )
-            throws Exception
     {
         PetType petType1 = new PetType( );
         petType1.setName( "Dog" );
@@ -40,23 +37,28 @@ public class DataLoader
         petType2.setName( "Cat" );
 
         Pet pet1 = new Pet( );
+        pet1.setName( "Spike" );
         pet1.setPetType( petType1 );
         pet1.setBirthDate( LocalDate.now( ) );
 
         Pet pet2 = new Pet( );
+        pet2.setName( "Lila" );
         pet2.setPetType( petType2 );
         pet2.setBirthDate( LocalDate.now( )
                                     .minusYears( 5 ) );
 
         Pet pet3 = new Pet( );
+        pet3.setName( "Tom" );
         pet3.setPetType( petType2 );
         pet3.setBirthDate( LocalDate.now( )
                                     .minusYears( 7 ) );
 
         Pet pet4 = new Pet( );
+        pet4.setName( "Sami" );
         pet4.setPetType( petType1 );
         pet4.setBirthDate( LocalDate.now( )
                                     .minusYears( 2 ) );
+
 
         Owner owner1 = new Owner( );
         owner1.setFirstName( "Ivan" );
@@ -64,23 +66,9 @@ public class DataLoader
         owner1.setAddress( "str. Marica 21" );
         owner1.setCity( "Plovdiv" );
         owner1.setTelephone( "234324" );
-        Set<Pet> owner1Pets = new HashSet<>( );
-        owner1Pets.add( pet1 );
-        pet1.setOwner( owner1 );
-        owner1.setPets( owner1Pets );
-
-        Owner owner2 = new Owner( );
-        owner2.setFirstName( "Jordanka" );
-        owner2.setLastName( "Fandukova" );
-        owner2.setAddress( "str. Sokol 2" );
-        owner2.setCity( "Blagoevgrad" );
-        owner2.setTelephone( "98673568" );
-        Set<Pet> owner2Pets = new HashSet<>( );
-        owner2Pets.add( pet2 );
-        owner2Pets.add( pet4 );
-        pet2.setOwner( owner2 );
-        pet4.setOwner( owner2 );
-        owner2.setPets( owner2Pets );
+        owner1.addPet( pet1 )
+              .addPet( pet4 );
+        ownerService.save( owner1 );
 
         Owner owner3 = new Owner( );
         owner3.setFirstName( "Bojko" );
@@ -88,44 +76,39 @@ public class DataLoader
         owner3.setAddress( "str. Lule Burgas 5" );
         owner3.setCity( "Sofia" );
         owner3.setTelephone( "00893424" );
-        Set<Pet> owner3Pets = new HashSet<>( );
-        owner3Pets.add( pet3 );
-        pet3.setOwner( owner3 );
-        owner3.setPets( owner3Pets );
-
-        ownerService.save( owner1 );
-        ownerService.save( owner2 );
+        owner3.addPet( pet2 )
+              .addPet( pet3 );
         ownerService.save( owner3 );
+
 
         System.out.println( "Loaded Owners...." );
 
-        Specialty specialty1 = new Specialty();
+        Specialty specialty1 = new Specialty( );
         specialty1.setDescription( "Bones" );
 
-        Specialty specialty2 = new Specialty();
+        Specialty specialty2 = new Specialty( );
         specialty2.setDescription( "General" );
 
-        Specialty specialty3 = new Specialty();
+        Specialty specialty3 = new Specialty( );
         specialty3.setDescription( "Derma" );
 
-        Specialty specialty4 = new Specialty();
+        Specialty specialty4 = new Specialty( );
         specialty4.setDescription( "Parasites" );
 
 
         Vet vet1 = new Vet( );
         vet1.setFirstName( "Ginka" );
         vet1.setLastName( "Kerkez" );
-        vet1.getSpecialties().add( specialty1 );
-        vet1.getSpecialties().add( specialty3 );
+        vet1.addSpecialty( specialty1 );
+        vet1.addSpecialty( specialty3 );
+        vetService.save( vet1 );
 
         Vet vet2 = new Vet( );
         vet2.setFirstName( "Dimitar" );
         vet2.setLastName( "Georgiev" );
-        vet2.getSpecialties().add( specialty1 );
-        vet2.getSpecialties().add( specialty2 );
-        vet2.getSpecialties().add( specialty4 );
-
-        vetService.save( vet1 );
+        vet2.addSpecialty( specialty1 );
+        vet2.addSpecialty( specialty2 );
+        vet2.addSpecialty( specialty4 );
         vetService.save( vet2 );
 
         System.out.println( "Loaded Vets...." );

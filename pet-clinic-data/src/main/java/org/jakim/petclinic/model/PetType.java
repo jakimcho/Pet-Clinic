@@ -19,4 +19,12 @@ public class PetType
     {
         this.name = name;
     }
+
+    @Override
+    public String toString( )
+    {
+        return super.toString( ) + " PetType{" +
+               "name='" + name + '\'' +
+               '}';
+    }
 }

@@ -23,6 +23,7 @@ public class OwnerServiceJPA
     public OwnerServiceJPA( OwnerRepository ownerRepository )
     {
         this.ownerRepository = ownerRepository;
+        System.out.println( "OwnerServiceJPA loaded" );
     }
 
     @Override
@@ -45,7 +46,7 @@ public class OwnerServiceJPA
     public Owner findById( Long id )
     {
         return ownerRepository.findById( id )
-                              .orElseThrow( ( ) -> new RuntimeException( "Sorry bro, no such Owner with id:" + id ) );
+                              .orElse( null );
     }
 
     @Override

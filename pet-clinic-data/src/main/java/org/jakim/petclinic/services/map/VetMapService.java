@@ -4,11 +4,13 @@ import org.jakim.petclinic.model.Specialty;
 import org.jakim.petclinic.model.Vet;
 import org.jakim.petclinic.services.SpecialtiesService;
 import org.jakim.petclinic.services.VetService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
+@Profile( { "default", "map"} )
 public class VetMapService
         extends AbstractMapService<Vet, Long>
         implements VetService
@@ -18,6 +20,7 @@ public class VetMapService
     public VetMapService( SpecialtiesService specialtiesService )
     {
         this.specialtiesService = specialtiesService;
+        System.out.println( "VetMapService loaded" );
     }
 
     @Override

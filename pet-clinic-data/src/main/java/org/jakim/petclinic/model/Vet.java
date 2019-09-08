@@ -8,7 +8,6 @@ import java.util.Set;
 public class Vet
         extends Person
 {
-
     @ManyToMany( fetch = FetchType.EAGER )
     @JoinTable( name = "vet_specialty",
                 joinColumns = @JoinColumn( name = "vet_id" ),
@@ -23,5 +22,11 @@ public class Vet
     public void setSpecialties( Set<Specialty> specialties )
     {
         this.specialties = specialties;
+    }
+
+    public Vet addSpecialty( final Specialty specialty )
+    {
+        this.specialties.add( specialty );
+        return this;
     }
 }
