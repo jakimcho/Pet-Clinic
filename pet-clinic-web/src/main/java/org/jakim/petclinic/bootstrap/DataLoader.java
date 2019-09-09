@@ -35,9 +35,11 @@ public class DataLoader
     {
         PetType petType1 = new PetType( );
         petType1.setName( "Dog" );
+        petType1 = petTypeService.save( petType1 );
 
         PetType petType2 = new PetType( );
         petType2.setName( "Cat" );
+        petType2 = petTypeService.save( petType2 );
 
         Pet pet1 = new Pet( );
         pet1.setName( "Spike" );
