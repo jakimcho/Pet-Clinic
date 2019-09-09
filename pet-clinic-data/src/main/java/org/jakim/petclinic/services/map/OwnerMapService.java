@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 
 @Service
-@Profile( { "default", "map"} )
+@Profile( { "default", "map" } )
 public class OwnerMapService
         extends AbstractMapService<Owner, Long>
         implements OwnerService
@@ -25,7 +25,7 @@ public class OwnerMapService
     {
         this.petTypeService = petTypeService;
         this.petService = petService;
-        System.out.println("OwnerMapService loaded" );
+        this.LOGGER.info( "OwnerMapService loaded" );
     }
 
     @Override

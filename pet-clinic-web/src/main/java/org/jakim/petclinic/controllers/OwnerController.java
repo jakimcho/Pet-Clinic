@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,7 +24,8 @@ public class OwnerController
         this.ownerService = ownerService;
     }
 
-    @RequestMapping( { "/", "" } )
+    @RequestMapping( value = { "/", "" },
+                     method = RequestMethod.GET )
     public String listOwners( Model model )
     {
         LOGGER.info( "Inside listOwners method" );

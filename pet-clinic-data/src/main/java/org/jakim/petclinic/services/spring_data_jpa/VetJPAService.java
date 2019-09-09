@@ -5,6 +5,8 @@ import org.jakim.petclinic.model.Vet;
 import org.jakim.petclinic.repositories.VetRepository;
 import org.jakim.petclinic.services.SpecialtiesService;
 import org.jakim.petclinic.services.VetService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.Set;
 public class VetJPAService
         implements VetService
 {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger( VetJPAService.class );
     private final VetRepository vetRepository;
     private final SpecialtiesService specialtiesService;
 
@@ -27,7 +31,7 @@ public class VetJPAService
     {
         this.vetRepository = vetRepository;
         this.specialtiesService = specialtiesService;
-        System.out.println( "VetServiceJPA loaded" );
+        LOGGER.info( "VetServiceJPA loaded" );
     }
 
     @Override

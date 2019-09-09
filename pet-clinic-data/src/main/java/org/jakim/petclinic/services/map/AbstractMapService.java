@@ -3,7 +3,6 @@ package org.jakim.petclinic.services.map;
 import org.jakim.petclinic.model.BaseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 
 import java.util.*;
 
@@ -11,8 +10,8 @@ public abstract class AbstractMapService<T extends BaseEntity, ID extends Long>
 {
 
     private Map<Long, T> map = new HashMap<>( );
-    private Logger LOGGER = LoggerFactory.getLogger( this.getClass( )
-                                                           .getName( ) );
+    protected final Logger LOGGER = LoggerFactory.getLogger( this.getClass( )
+                                                                 .getName( ) );
 
     Set<T> findAll( )
     {
@@ -60,8 +59,8 @@ public abstract class AbstractMapService<T extends BaseEntity, ID extends Long>
     void delete( T object )
     {
         map.entrySet( )
-           .removeIf( entry->entry.getValue( )
-                                  .equals( object ) );
+           .removeIf( entry -> entry.getValue( )
+                                    .equals( object ) );
     }
 
     private Long getNextId( )

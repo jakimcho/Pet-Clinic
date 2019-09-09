@@ -1,6 +1,5 @@
 package org.jakim.petclinic.services.map;
 
-import org.jakim.petclinic.model.Pet;
 import org.jakim.petclinic.model.Visit;
 import org.jakim.petclinic.services.VisitService;
 import org.jakim.petclinic.services.spring_data_jpa.VisitJPAService;
@@ -20,7 +19,7 @@ public class VisitMapService
 {
     public VisitMapService( )
     {
-        System.out.println( "VisitMapService loaded" );
+        this.LOGGER.info( "VisitMapService loaded" );
     }
 
     @Override

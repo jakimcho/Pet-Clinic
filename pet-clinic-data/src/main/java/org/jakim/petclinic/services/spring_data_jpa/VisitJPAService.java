@@ -4,6 +4,8 @@ import org.jakim.petclinic.model.Pet;
 import org.jakim.petclinic.model.Visit;
 import org.jakim.petclinic.repositories.VisitRepository;
 import org.jakim.petclinic.services.VisitService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +21,13 @@ import java.util.Set;
 public class VisitJPAService
         implements VisitService
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger( VisitJPAService.class );
     private final VisitRepository visitRepository;
 
     public VisitJPAService( VisitRepository visitRepository )
     {
         this.visitRepository = visitRepository;
-        System.out.println( "VetServiceJPA loaded" );
+        LOGGER.info( "VetServiceJPA loaded" );
     }
 
     @Override
@@ -52,15 +55,15 @@ public class VisitJPAService
     }
 
     @Override
-    public void deleteById( Long aLong )
+    public void deleteById( Long id )
     {
-
+        this.visitRepository.deleteById( id );
     }
 
     @Override
-    public void delete( Visit object )
+    public void delete( Visit visit )
     {
-
+        this.visitRepository.delete( visit );
     }
 
     public static void verifyVisitPet( Visit visit )

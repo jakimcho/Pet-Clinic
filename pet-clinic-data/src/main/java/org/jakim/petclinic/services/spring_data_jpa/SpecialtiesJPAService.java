@@ -3,6 +3,8 @@ package org.jakim.petclinic.services.spring_data_jpa;
 import org.jakim.petclinic.model.Specialty;
 import org.jakim.petclinic.repositories.SpecialtiesRepository;
 import org.jakim.petclinic.services.SpecialtiesService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,13 @@ import java.util.Set;
 public class SpecialtiesJPAService
         implements SpecialtiesService
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger( SpecialtiesJPAService.class );
     private final SpecialtiesRepository specialtiesRepository;
 
     public SpecialtiesJPAService( SpecialtiesRepository specialtiesRepository )
     {
         this.specialtiesRepository = specialtiesRepository;
-        System.out.println( "SpecialtiesServiceJPA loaded" );
+        LOGGER.info( "SpecialtiesServiceJPA loaded" );
     }
 
     @Override

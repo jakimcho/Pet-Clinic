@@ -1,23 +1,21 @@
 package org.jakim.petclinic.services.map;
 
 import org.jakim.petclinic.model.PetType;
-import org.jakim.petclinic.model.Vet;
 import org.jakim.petclinic.services.PetTypeService;
-import org.jakim.petclinic.services.VetService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
-@Profile( { "default", "map"} )
+@Profile( { "default", "map" } )
 public class PetTypeMapService
         extends AbstractMapService<PetType, Long>
         implements PetTypeService
 {
     public PetTypeMapService( )
     {
-        System.out.println("PetTypeMapService loaded" );
+        this.LOGGER.info( "PetTypeMapService loaded" );
     }
 
     @Override

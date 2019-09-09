@@ -2,12 +2,12 @@ package org.jakim.petclinic.controllers;
 
 import org.jakim.petclinic.model.Vet;
 import org.jakim.petclinic.services.VetService;
-import org.jakim.petclinic.services.map.VetMapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,7 +24,8 @@ public class VetController
         this.vetService = vetService;
     }
 
-    @RequestMapping( { "/", "" } )
+    @RequestMapping( value = { "/", "" },
+                     method = RequestMethod.GET )
     public String listVets( Model model )
     {
         LOGGER.info( "Inside listVets method" );

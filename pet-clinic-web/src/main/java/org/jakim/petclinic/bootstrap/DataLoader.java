@@ -5,6 +5,8 @@ import org.jakim.petclinic.services.OwnerService;
 import org.jakim.petclinic.services.PetTypeService;
 import org.jakim.petclinic.services.VetService;
 import org.jakim.petclinic.services.VisitService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 public class DataLoader
         implements CommandLineRunner
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger( DataLoader.class );
     private final OwnerService ownerService;
     private final VetService vetService;
     private final VisitService visitService;
@@ -85,8 +88,7 @@ public class DataLoader
               .addPet( pet3 );
         ownerService.save( owner3 );
 
-
-        System.out.println( "Loaded Owners...." );
+        LOGGER.info( "Loaded Owners...." );
 
         Specialty specialty1 = new Specialty( );
         specialty1.setDescription( "Bones" );
@@ -138,7 +140,7 @@ public class DataLoader
         this.visitService.save( visit3 );
 
 
-        System.out.println( "Loaded Vets...." );
+        LOGGER.info( "Loaded Vets...." );
     }
 }
 
