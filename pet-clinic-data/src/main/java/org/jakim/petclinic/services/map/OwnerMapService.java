@@ -74,6 +74,11 @@ public class OwnerMapService
 
     private void persistPet( final Pet pet )
     {
+        if( pet == null )
+        {
+            throw new RuntimeException( "Cannot save null Pet" );
+        }
+
         PersistPetType( pet.getPetType( ) );
         if( pet.getId( ) == null )
         {

@@ -6,8 +6,10 @@ import org.jakim.petclinic.model.PetType;
 import org.jakim.petclinic.services.PetService;
 import org.jakim.petclinic.services.PetTypeService;
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Answers;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -16,7 +18,8 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class OwnerMapServiceTest
 {
@@ -27,6 +30,9 @@ public class OwnerMapServiceTest
     private PetTypeService petTypeService;
     @Mock
     private PetService petService;
+
+    @Rule
+    public ExpectedException exceptionGrabber = ExpectedException.none( );
 
     @Before
     public void setUp( )
@@ -146,6 +152,8 @@ public class OwnerMapServiceTest
     {
         // Given
         Owner testOwner = prepareOwner( );
+        Pet pet = preparePet( );
+        testOwner.addPet( pet );
         assertThat( testOwner.getId( ) ).isNull( );
 
         // When
@@ -154,6 +162,17 @@ public class OwnerMapServiceTest
         // Then
         assertThat( actualOwner.getId( ) ).isNotNull( );
         assertThat( actualOwner.getId( ) ).isGreaterThan( 0L );
+        verify( petService,
+                times( 1 ) ).save( pet );
+    }
+
+    @Test
+    public void tryToSaveNullOwnerTest( )
+    {
+        Owner actualOwner = ownerMapService.save( null );
+
+        // Then
+        assertThat( actualOwner ).isNull( );
     }
 
     @Test
@@ -161,9 +180,13 @@ public class OwnerMapServiceTest
     {
         // Given
         Owner testOwner = prepareOwner( );
-        Pet pet = preparePet( );
-        testOwner.addPet( pet );
-
+        Pet pet1 = preparePet( );
+        Pet pet2 = preparePet( );
+        pet2.setId( 2L );
+        pet2.getPetType( )
+            .setId( 2L );
+        testOwner.addPet( pet1 );
+        testOwner.addPet( pet2 );
         assertThat( testOwner.getId( ) ).isNull( );
 
         // When
@@ -172,8 +195,47 @@ public class OwnerMapServiceTest
         // Then
         assertThat( actualOwner.getId( ) ).isNotNull( );
         assertThat( actualOwner.getId( ) ).isGreaterThan( 0L );
-        assertThat( actualOwner.getPets( ) ).containsOnly( pet );
+        assertThat( actualOwner.getPets( ) ).containsOnly( pet1,
+                                                           pet2 );
+        assertThat( pet2.getId( ) ).isEqualTo( 2L );
+        assertThat( pet2.getPetType( )
+                        .getId( ) ).isEqualTo( 2L );
     }
+
+    @Test
+    public void trySaveOwnerWithNullPetTest( )
+    {
+        // Given
+        Owner testOwner = prepareOwner( );
+        testOwner.getPets( )
+                 .add( null );
+
+        // Then
+        exceptionGrabber.expect( RuntimeException.class );
+        exceptionGrabber.expectMessage( "Cannot save null Pet" );
+
+        //When
+        ownerMapService.save( testOwner );
+    }
+
+    @Test
+    public void trySaveOwnerWithNullPetTypeTest( )
+    {
+        // Given
+        Owner testOwner = prepareOwner( );
+        Pet pet = preparePet( );
+        pet.setPetType( null );
+        testOwner.getPets( )
+                 .add( pet );
+
+        // Then
+        exceptionGrabber.expect( RuntimeException.class );
+        exceptionGrabber.expectMessage( "PetType is required" );
+
+        //When
+        ownerMapService.save( testOwner );
+    }
+
 
     private Pet preparePet( )
     {
