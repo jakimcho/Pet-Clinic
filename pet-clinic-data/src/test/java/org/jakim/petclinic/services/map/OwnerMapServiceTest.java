@@ -5,11 +5,8 @@ import org.jakim.petclinic.model.Pet;
 import org.jakim.petclinic.model.PetType;
 import org.jakim.petclinic.services.PetService;
 import org.jakim.petclinic.services.PetTypeService;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -18,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -31,10 +29,8 @@ public class OwnerMapServiceTest
     @Mock
     private PetService petService;
 
-    @Rule
-    public ExpectedException exceptionGrabber = ExpectedException.none( );
 
-    @Before
+    @BeforeEach
     public void setUp( )
             throws Exception
     {
@@ -210,12 +206,11 @@ public class OwnerMapServiceTest
         testOwner.getPets( )
                  .add( null );
 
-        // Then
-        exceptionGrabber.expect( RuntimeException.class );
-        exceptionGrabber.expectMessage( "Cannot save null Pet" );
+        //Then
+        RuntimeException ex = assertThrows( RuntimeException.class,
+                                            ( ) -> ownerMapService.save( testOwner ) );
 
-        //When
-        ownerMapService.save( testOwner );
+        assertThat( ex.getMessage( ) ).isEqualTo( "Cannot save null Pet" );
     }
 
     @Test
@@ -228,12 +223,11 @@ public class OwnerMapServiceTest
         testOwner.getPets( )
                  .add( pet );
 
-        // Then
-        exceptionGrabber.expect( RuntimeException.class );
-        exceptionGrabber.expectMessage( "PetType is required" );
+        //Then
+        RuntimeException ex = assertThrows( RuntimeException.class,
+                                            ( ) -> ownerMapService.save( testOwner ) );
 
-        //When
-        ownerMapService.save( testOwner );
+        assertThat( ex.getMessage( ) ).isEqualTo( "PetType is required" );
     }
 
 

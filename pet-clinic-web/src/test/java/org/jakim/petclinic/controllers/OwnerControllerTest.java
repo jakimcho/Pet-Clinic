@@ -2,8 +2,8 @@ package org.jakim.petclinic.controllers;
 
 import org.jakim.petclinic.model.Owner;
 import org.jakim.petclinic.services.OwnerService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -34,7 +34,7 @@ public class OwnerControllerTest
     @Mock
     private Model model;
 
-    @Before
+    @BeforeEach
     public void setUp( )
             throws Exception
     {

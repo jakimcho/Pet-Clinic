@@ -2,8 +2,8 @@ package org.jakim.petclinic.services.spring_data_jpa;
 
 import org.jakim.petclinic.model.Owner;
 import org.jakim.petclinic.repositories.OwnerRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,7 +25,7 @@ public class OwnerJPAServiceTest
     @Mock
     OwnerRepository ownerRepository;
 
-    @Before
+    @BeforeEach
     public void setUp( )
             throws Exception
     {
