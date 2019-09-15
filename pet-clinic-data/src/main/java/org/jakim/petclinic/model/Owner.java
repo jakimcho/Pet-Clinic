@@ -68,4 +68,7 @@ public class Owner
         return this;
     }
 
+
+    // TODO: implement Owner equals and hash methods in order
+
 }

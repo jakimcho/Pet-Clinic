@@ -3,6 +3,8 @@ package org.jakim.petclinic.services.spring_data_jpa;
 import org.jakim.petclinic.model.Owner;
 import org.jakim.petclinic.repositories.OwnerRepository;
 import org.jakim.petclinic.services.OwnerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +20,13 @@ import java.util.Set;
 public class OwnerJPAService
         implements OwnerService
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger( OwnerJPAService.class );
     private final OwnerRepository ownerRepository;
 
     public OwnerJPAService( OwnerRepository ownerRepository )
     {
         this.ownerRepository = ownerRepository;
-        System.out.println( "OwnerServiceJPA loaded" );
+        LOGGER.info( "OwnerServiceJPA loaded" );
     }
 
     @Override
