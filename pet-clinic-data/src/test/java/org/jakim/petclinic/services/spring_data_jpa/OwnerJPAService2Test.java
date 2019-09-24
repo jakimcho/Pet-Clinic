@@ -57,8 +57,8 @@ public class OwnerJPAService2Test
         //Then
         assertThat( actualOwner ).hasFieldOrPropertyWithValue( "lastName",
                                                                "Ivanov" );
-        verify( ownerRepository,
-                times( 1 ) ).findByLastName( "Ivanov" );
+        // Default calling times is 1
+        verify( ownerRepository ).findByLastName( "Ivanov" );
     }
 
     @Test
@@ -74,8 +74,8 @@ public class OwnerJPAService2Test
 
         //Then
         assertThat( actualOwners ).hasSize( sizeOf( testOwners ) );
-        verify( ownerRepository,
-                times( 1 ) ).findAll( );
+        // Default calling times is 1
+        verify( ownerRepository ).findAll( );
 
         // TODO: Once owner equals/hash methods are implemented uncomment bellow check
         // assertThat( actualOwners ).containsExactlyInAnyOrderElementsOf( testOwners );
@@ -100,8 +100,8 @@ public class OwnerJPAService2Test
                                                                1L )
                                  .hasFieldOrPropertyWithValue( "lastName",
                                                                "Ivanov" );
-        verify( ownerRepository,
-                times( 1 ) ).findById( argumentCaptor.capture( ) );
+        // Default calling times is 1
+        verify( ownerRepository ).findById( argumentCaptor.capture( ) );
         assertThat( argumentCaptor.getValue( ) ).isEqualTo( 1L );
     }
 
@@ -118,8 +118,8 @@ public class OwnerJPAService2Test
 
         //Then
         assertThat( actualOwner ).isNull( );
-        verify( ownerRepository,
-                times( 1 ) ).findById( argumentCaptor.capture( ) );
+        // Default calling times is 1
+        verify( ownerRepository ).findById( argumentCaptor.capture( ) );
         assertThat( argumentCaptor.getValue( ) ).isEqualTo( 2L );
     }
 
@@ -140,8 +140,8 @@ public class OwnerJPAService2Test
         //Then
         assertThat( actualOwner ).hasFieldOrPropertyWithValue( "lastName",
                                                                "Ivanov" );
-        verify( ownerRepository,
-                times( 1 ) ).save( argumentCaptor.capture( ) );
+        // Default calling times is 1
+        verify( ownerRepository ).save( argumentCaptor.capture( ) );
 
         assertThat( argumentCaptor.getValue( ) ).hasFieldOrPropertyWithValue( "lastName",
                                                                               "Ivanov" );
@@ -158,8 +158,8 @@ public class OwnerJPAService2Test
 
         //Then
 
-        verify( ownerRepository,
-                times( 1 ) ).deleteById( argumentCaptor.capture( ) );
+        // Default calling times is 1
+        verify( ownerRepository ).deleteById( argumentCaptor.capture( ) );
 
         assertThat( argumentCaptor.getValue( ) ).isEqualTo( 1L );
     }
@@ -176,8 +176,9 @@ public class OwnerJPAService2Test
         ownerJPAService.delete( expectedOwner );
 
         //Then
-        verify( ownerRepository,
-                times( 1 ) ).delete( argumentCaptor.capture( ) );
+
+        // Default calling times is 1
+        verify( ownerRepository ).delete( argumentCaptor.capture( ) );
 
         assertThat( argumentCaptor.getValue( ) ).hasFieldOrPropertyWithValue( "lastName",
                                                                               "Ivanov" );
