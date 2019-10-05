@@ -24,8 +24,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /*
  * This copy of the original OwnerJPAServiceTest test class is a show case demo of
@@ -70,9 +69,6 @@ public class OwnerController2Test
     public void controllerListOwnersMapToRoot( )
             throws Exception
     {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( this.ownerController )
-                                         .build( );
-
         mockMvc.perform( request( GET,
                                   "/owners/" ) )
                .andExpect( status( ).isOk( ) )
@@ -83,9 +79,6 @@ public class OwnerController2Test
     public void controllerListOwnersMapToRelative( )
             throws Exception
     {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup( this.ownerController )
-                                         .build( );
-
         mockMvc.perform( request( GET,
                                   "/owners" ) )
                .andExpect( status( ).isOk( ) )
@@ -125,6 +118,43 @@ public class OwnerController2Test
                     hasSize( sizeOf( getPreparedOwners( ) ) ) );
 
     }
+
+    @Test
+    public void displayExistingOwner( )
+            throws Exception
+    {
+        // Given
+        Owner owner = new Owner( );
+        owner.setId( 1L );
+        owner.setFirstName( "Ivan" );
+        owner.setLastName( "Ivanov" );
+
+        when( this.ownerService.findById( anyLong( ) ) ).thenReturn( owner );
+
+        //when and then
+        mockMvc.perform( get( "/owners/1" ) )
+               .andExpect( status( ).isOk( ) )
+               .andExpect( view( ).name( "owners/ownerDetails" ) )
+               .andExpect( model( ).attribute( "owner",
+                                               hasProperty( "id",
+                                                            is( 1L ) ) ) );
+        verify( this.ownerService ).findById( 1L );
+    }
+
+    @Test
+    public void displayNotExistinggOwner( )
+            throws Exception
+    {
+        // Given
+        when( this.ownerService.findById( anyLong( ) ) ).thenReturn( null );
+
+        //when and then
+        mockMvc.perform( get( "/owners/1" ) )
+               .andExpect( status( ).isNotFound( ) )
+               .andExpect( view( ).name( "owners/ownerDetails" ) );
+        verify( this.ownerService ).findById( 1L );
+    }
+    ///////////////////////////// Helpers //////////////////////////////////////
 
     private Set<Owner> getPreparedOwners( )
     {

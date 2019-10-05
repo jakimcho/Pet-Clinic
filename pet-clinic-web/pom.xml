@@ -107,6 +107,7 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!-- end of webjars -->
     </dependencies>
 
