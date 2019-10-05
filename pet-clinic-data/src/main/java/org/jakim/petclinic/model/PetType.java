@@ -23,8 +23,6 @@ public class PetType
     @Override
     public String toString( )
     {
-        return super.toString( ) + " PetType{" +
-               "name='" + name + '\'' +
-               '}';
+        return this.getName( );
     }
 }
