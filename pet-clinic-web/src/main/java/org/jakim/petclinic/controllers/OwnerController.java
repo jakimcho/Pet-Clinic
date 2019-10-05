@@ -10,18 +10,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequestMapping( "/owners" )
 @Controller
 public class OwnerController
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger( OwnerController.class );
     private final OwnerService ownerService;
-    private final Logger LOGGER = LoggerFactory.getLogger( OwnerController.class );
 
     public OwnerController( OwnerService ownerService )
     {
@@ -33,10 +31,8 @@ public class OwnerController
     {
         LOGGER.info( "Inside listOwners method" );
         Set<Owner> owners = ownerService.findAll( );
-        LOGGER.info( "Adding owners {} to the model",
-                     owners.stream( )
-                           .map( Object::toString )
-                           .collect( Collectors.joining( ", " ) ) );
+        LOGGER.info( "Adding {} owners  to the model",
+                     owners.size( ) );
         model.addAttribute( "owners",
                             owners );
         LOGGER.info( "Exiting listOwners method" );
@@ -44,7 +40,7 @@ public class OwnerController
     }
 
     @GetMapping( "/find" )
-    public String findOwners( Model model )
+    public String findOwners( )
     {
         return "Not Implemented...";
     }
