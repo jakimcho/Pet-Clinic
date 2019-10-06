@@ -91,7 +91,7 @@ class OwnerController2Test
     {
         mockMvc.perform( get( "/owners/find" ) )
                .andExpect( status( ).isOk( ) )
-               .andExpect( view( ).name( "owners/find" ) );
+               .andExpect( view( ).name( "owners/findOwner" ) );
     }
 
     @Test
@@ -134,7 +134,7 @@ class OwnerController2Test
         //when and then
         mockMvc.perform( get( "/owners/1" ) )
                .andExpect( status( ).isOk( ) )
-               .andExpect( view( ).name( "/owners/ownerDetails" ) )
+               .andExpect( view( ).name( "owners/ownerDetails" ) )
                .andExpect( model( ).attribute( "owner",
                                                hasProperty( "id",
                                                             is( 1L ) ) ) );
@@ -151,7 +151,7 @@ class OwnerController2Test
         //when and then
         mockMvc.perform( get( "/owners/1" ) )
                .andExpect( status( ).isNotFound( ) )
-               .andExpect( view( ).name( "/owners/ownerDetails" ) );
+               .andExpect( view( ).name( "owners/ownerDetails" ) );
         verify( this.ownerService ).findById( 1L );
     }
 
@@ -221,7 +221,7 @@ class OwnerController2Test
         //when and then
         mockMvc.perform( get( "/owners/doFind" ) )
                .andExpect( status( ).isNotFound( ) )
-               .andExpect( view( ).name( "owners/find" ) );
+               .andExpect( view( ).name( "owners/ownersList" ) );
         verify( this.ownerService,
                 never( ) ).findByLastName( anyString( ) );
         verify( this.ownerService,
