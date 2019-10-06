@@ -9,9 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.IterableUtil.sizeOf;
@@ -24,7 +22,7 @@ import static org.mockito.Mockito.*;
  * */
 
 @ExtendWith( MockitoExtension.class )
-public class OwnerJPAService2Test
+class OwnerJPAService2Test
 {
 
     @InjectMocks
@@ -35,7 +33,7 @@ public class OwnerJPAService2Test
 
     // Since we are using MockitoExtension and @InjectMocks we don;t need the setup method any more
 /*  @BeforeEach
-    public void setUp( )
+     void setUp( )
             throws Exception
     {
         MockitoAnnotations.initMocks( this );
@@ -44,7 +42,7 @@ public class OwnerJPAService2Test
 */
 
     @Test
-    public void findByLastName( )
+    void findByLastName( )
     {
         //Given
         Owner expectedOwner = new Owner( );
@@ -62,7 +60,7 @@ public class OwnerJPAService2Test
     }
 
     @Test
-    public void findAll( )
+    void findAll( )
     {
         //Given
         Set<Owner> testOwners = getPreparedOwners( );
@@ -82,12 +80,12 @@ public class OwnerJPAService2Test
     }
 
     @Test
-    public void findById( )
+    void findById( )
     {
         //Given
         Owner expectedOwner = new Owner( );
         expectedOwner.setLastName( "Ivanov" );
-        expectedOwner.setId( 1l );
+        expectedOwner.setId( 1L );
         when( ownerRepository.findById( anyLong( ) ) )
                 .thenReturn( Optional.of( expectedOwner ) );
         ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass( Long.class );
@@ -106,7 +104,7 @@ public class OwnerJPAService2Test
     }
 
     @Test
-    public void findByNotExistingId( )
+    void findByNotExistingId( )
     {
         //Given
         when( ownerRepository.findById( 2L ) )
@@ -124,7 +122,7 @@ public class OwnerJPAService2Test
     }
 
     @Test
-    public void save( )
+    void save( )
     {
         //Given
         Owner expectedOwner = new Owner( );
@@ -148,7 +146,7 @@ public class OwnerJPAService2Test
     }
 
     @Test
-    public void deleteById( )
+    void deleteById( )
     {
         //Given
         ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass( Long.class );
@@ -165,7 +163,7 @@ public class OwnerJPAService2Test
     }
 
     @Test
-    public void delete( )
+    void delete( )
     {
         //Given
         Owner expectedOwner = new Owner( );
@@ -176,13 +174,51 @@ public class OwnerJPAService2Test
         ownerJPAService.delete( expectedOwner );
 
         //Then
-
         // Default calling times is 1
         verify( ownerRepository ).delete( argumentCaptor.capture( ) );
 
         assertThat( argumentCaptor.getValue( ) ).hasFieldOrPropertyWithValue( "lastName",
                                                                               "Ivanov" );
     }
+
+    @Test
+    void findAllOwnersByLastName( )
+    {
+        //Given
+        Set<Owner> expectedOwners = getPreparedOwners( );
+        ArgumentCaptor<String> arg = ArgumentCaptor.forClass( String.class );
+        when( ownerRepository.findAllByLastNameIgnoreCase( anyString( ) ) ).thenReturn( expectedOwners );
+
+        //When
+        Set<Owner> actualOwners = this.ownerJPAService.findAllByLastName( "Ivanov" );
+
+        //Then
+        assertThat( actualOwners ).hasSameElementsAs( expectedOwners );
+        verify( ownerRepository ).findAllByLastNameIgnoreCase( arg.capture( ) );
+        verify( ownerRepository,
+                never( ) ).findByLastName( anyString( ) );
+        assertThat( arg.getValue( ) ).isEqualTo( "Ivanov" );
+    }
+
+    @Test
+    void findAllOwnersByLastName_NoOwners( )
+    {
+        //Given
+        ArgumentCaptor<String> arg = ArgumentCaptor.forClass( String.class );
+        when( ownerRepository.findAllByLastNameIgnoreCase( anyString( ) ) ).thenReturn( Collections.emptySet( ) );
+
+        //When
+        Set<Owner> actualOwners = this.ownerJPAService.findAllByLastName( "Ivanov" );
+
+        //Then
+        assertThat( actualOwners ).isEmpty( );
+        verify( ownerRepository ).findAllByLastNameIgnoreCase( arg.capture( ) );
+        verify( ownerRepository,
+                never( ) ).findByLastName( anyString( ) );
+        assertThat( arg.getValue( ) ).isEqualTo( "Ivanov" );
+    }
+
+    //////////////////////////// Helpers ///////////////////////////////////
 
     private Set<Owner> getPreparedOwners( )
     {

@@ -8,12 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * */
 
 @ExtendWith( MockitoExtension.class )
-public class OwnerController2Test
+class OwnerController2Test
 {
 
     @InjectMocks
@@ -59,14 +59,14 @@ public class OwnerController2Test
 */
 
     @BeforeEach
-    public void setUp( )
+    void setUp( )
     {
         mockMvc = MockMvcBuilders.standaloneSetup( this.ownerController )
                                  .build( );
     }
 
     @Test
-    public void controllerListOwnersMapToRoot( )
+    void controllerListOwnersMapToRoot( )
             throws Exception
     {
         mockMvc.perform( request( GET,
@@ -76,7 +76,7 @@ public class OwnerController2Test
     }
 
     @Test
-    public void controllerListOwnersMapToRelative( )
+    void controllerListOwnersMapToRelative( )
             throws Exception
     {
         mockMvc.perform( request( GET,
@@ -86,7 +86,7 @@ public class OwnerController2Test
     }
 
     @Test
-    public void controllerFindOwners( )
+    void controllerFindOwners( )
             throws Exception
     {
         mockMvc.perform( get( "/owners/find" ) )
@@ -95,7 +95,7 @@ public class OwnerController2Test
     }
 
     @Test
-    public void listOwners( )
+    void listOwners( )
     {
         // Given
         when( ownerService.findAll( ) ).thenReturn( getPreparedOwners( ) );
@@ -120,7 +120,7 @@ public class OwnerController2Test
     }
 
     @Test
-    public void displayExistingOwner( )
+    void displayExistingOwner( )
             throws Exception
     {
         // Given
@@ -134,7 +134,7 @@ public class OwnerController2Test
         //when and then
         mockMvc.perform( get( "/owners/1" ) )
                .andExpect( status( ).isOk( ) )
-               .andExpect( view( ).name( "owners/ownerDetails" ) )
+               .andExpect( view( ).name( "/owners/ownerDetails" ) )
                .andExpect( model( ).attribute( "owner",
                                                hasProperty( "id",
                                                             is( 1L ) ) ) );
@@ -142,7 +142,7 @@ public class OwnerController2Test
     }
 
     @Test
-    public void displayNotExistinggOwner( )
+    void displayNotExistingOwner( )
             throws Exception
     {
         // Given
@@ -151,9 +151,109 @@ public class OwnerController2Test
         //when and then
         mockMvc.perform( get( "/owners/1" ) )
                .andExpect( status( ).isNotFound( ) )
-               .andExpect( view( ).name( "owners/ownerDetails" ) );
+               .andExpect( view( ).name( "/owners/ownerDetails" ) );
         verify( this.ownerService ).findById( 1L );
     }
+
+    @Test
+    void findOwner( )
+            throws Exception
+    {
+        //when and then
+        mockMvc.perform( get( "/owners/find" ) )
+               .andExpect( status( ).isOk( ) )
+               .andExpect( view( ).name( "owners/findOwner" ) )
+               .andExpect( model( ).attributeExists( "owner" ) );
+    }
+
+    @Test
+    void processFindForm_manyOwners( )
+            throws Exception
+    {
+        // Given
+        Set<Owner> expectedOwners = getPreparedOwners( );
+        when( this.ownerService.findAllByLastName( anyString( ) ) ).thenReturn( expectedOwners );
+        //when and then
+        mockMvc.perform( get( "/owners/doFind" ) )
+               .andExpect( status( ).isOk( ) )
+               .andExpect( view( ).name( "owners/ownersList" ) )
+               .andExpect( model( ).attribute( "owners",
+                                               equalTo( expectedOwners ) ) );
+        verify( this.ownerService,
+                never( ) ).findByLastName( anyString( ) );
+        verify( this.ownerService ).findAllByLastName( anyString( ) );
+    }
+
+    @Test
+    void processFindForm_oneOwner( )
+            throws Exception
+    {
+        // Given
+        Owner owner = new Owner( );
+        owner.setId( 1L );
+        owner.setFirstName( "Ivan" );
+        owner.setLastName( "Ivanov" );
+        Set<Owner> expectedOwners = new HashSet<>( );
+        expectedOwners.add( owner );
+
+        when( this.ownerService.findAllByLastName( anyString( ) ) ).thenReturn( expectedOwners );
+        //when and then
+        mockMvc.perform( get( "/owners/doFind" ) )
+               .andExpect( status( ).is3xxRedirection( ) )
+               .andExpect( view( ).name( "redirect:/owners/" + owner.getId( ) ) )
+               .andExpect( model( ).attribute( "owner",
+                                               hasProperty( "lastName",
+                                                            is( "Ivanov" ) ) ) );
+        verify( this.ownerService,
+                never( ) ).findByLastName( anyString( ) );
+        verify( this.ownerService,
+                never( ) ).findAll( );
+        verify( this.ownerService ).findAllByLastName( anyString( ) );
+    }
+
+    @Test
+    void processFindForm_noOwnerFound( )
+            throws Exception
+    {
+        // Given
+        when( this.ownerService.findAllByLastName( anyString( ) ) ).thenReturn( Collections.emptySet( ) );
+
+        //when and then
+        mockMvc.perform( get( "/owners/doFind" ) )
+               .andExpect( status( ).isNotFound( ) )
+               .andExpect( view( ).name( "owners/find" ) );
+        verify( this.ownerService,
+                never( ) ).findByLastName( anyString( ) );
+        verify( this.ownerService,
+                never( ) ).findAll( );
+        verify( this.ownerService ).findAllByLastName( anyString( ) );
+    }
+
+    @Test
+    void processFindForm_noGetParams( )
+            throws Exception
+    {
+        //Given
+        Set<Owner> expectedOwners = getPreparedOwners( );
+        ArgumentCaptor<String> args = ArgumentCaptor.forClass( String.class );
+        when( ownerService.findAllByLastName( anyString( ) ) ).thenReturn( expectedOwners );
+        Owner owner = new Owner( );
+        owner.setLastName( null );
+
+        //when and then
+        mockMvc.perform( get( "/owners/doFind",
+                              owner ) )
+               .andExpect( status( ).isOk( ) )
+               .andExpect( view( ).name( "owners/ownersList" ) )
+               .andExpect( model( ).attribute( "owners",
+                                               equalTo( expectedOwners ) ) );
+        verify( this.ownerService,
+                never( ) ).findByLastName( anyString( ) );
+        verify( this.ownerService,
+                never( ) ).findAll( );
+        verify( this.ownerService ).findAllByLastName( anyString( ) );
+    }
+
     ///////////////////////////// Helpers //////////////////////////////////////
 
     private Set<Owner> getPreparedOwners( )

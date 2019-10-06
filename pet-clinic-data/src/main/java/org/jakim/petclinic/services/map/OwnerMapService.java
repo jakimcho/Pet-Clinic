@@ -9,7 +9,9 @@ import org.jakim.petclinic.services.PetTypeService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Profile( { "default", "map" } )
@@ -69,7 +71,22 @@ public class OwnerMapService
     @Override
     public Owner findByLastName( String lastName )
     {
-        return null;
+        return this.findAll( )
+                   .stream( )
+                   .filter( owner -> owner.getLastName( )
+                                          .equalsIgnoreCase( lastName ) )
+                   .findFirst( )
+                   .orElse( null );
+    }
+
+    @Override
+    public Set<Owner> findAllByLastName( String lastName )
+    {
+        return this.findAll( )
+                   .stream( )
+                   .filter( owner -> owner.getLastName( )
+                                          .equalsIgnoreCase( lastName ) )
+                   .collect( Collectors.toSet( ) );
     }
 
     private void persistPet( final Pet pet )

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class OwnerController
         this.ownerService = ownerService;
     }
 
-    @GetMapping( { "/", "" } )
+    @GetMapping( { "/", "", "/ownersList" } )
     public String listOwners( Model model )
     {
         LOGGER.info( "Inside listOwners method" );
@@ -39,25 +40,89 @@ public class OwnerController
         return "owners/index";
     }
 
-    @GetMapping( "/find" )
-    public String findOwners( )
+
+    @GetMapping( { "/find", "/find/" } )
+    public ModelAndView findOwner( )
     {
-        return "Not Implemented...";
+        LOGGER.info( "Inside findOwner method" );
+        ModelAndView mav = new ModelAndView( "owners/findOwner" );
+        Owner searchedOwner = new Owner( );
+        mav.addObject( searchedOwner );
+        LOGGER.info( "Exiting findOwner method" );
+        return mav;
+    }
+
+    @GetMapping( "/doFind" )
+    public ModelAndView processFindForm( final Owner owner,
+                                         final BindingResult result )
+    {
+        ModelAndView mav = new ModelAndView( );
+        LOGGER.info( "Inside processFindForm method" );
+        // Allow to list all owners if no Get parameters are provided
+        if( owner.getLastName( ) == null )
+        {
+            owner.setLastName( "" );
+        }
+
+        LOGGER.info( "Searching for owner with last name '{}'",
+                     owner.getLastName( ) );
+        Set<Owner> foundOwners = this.ownerService.findAllByLastName( owner.getLastName( ) );
+        if( foundOwners.isEmpty( ) )
+        {
+            LOGGER.warn( "Owner with last name {} was not found in the DB",
+                         owner.getLastName( ) );
+            result.rejectValue( "lastName",
+                                "notFound",
+                                "not found" );
+            mav.setStatus( HttpStatus.NOT_FOUND );
+            mav.setViewName( "owners/ownersList" );
+            LOGGER.info( "Exiting processFindForm method" );
+            return mav;
+        }
+
+        if( foundOwners.size( ) == 1 )
+        {
+            Owner foundOwner = foundOwners.iterator( )
+                                          .next( );
+            LOGGER.debug( "Found one owner {}",
+                          owner );
+            mav.addObject( foundOwner );
+            mav.setViewName( "redirect:/owners/" + foundOwner.getId( ) );
+        } else
+        {
+            LOGGER.debug( "Found {} owners ",
+                          foundOwners.size( ) );
+
+            mav.addObject( "owners",
+                           foundOwners );
+            mav.setViewName( "owners/ownersList" );
+        }
+
+        LOGGER.info( "Exiting processFindForm method" );
+        return mav;
     }
 
     @GetMapping( { "/{ownerId/}", "/{ownerId}" } )
     public ModelAndView showOwner( @PathVariable( "ownerId" ) Long ownerId )
     {
+        LOGGER.info( "Inside showOwner method" );
         ModelAndView mav = new ModelAndView( "owners/ownerDetails" );
+        LOGGER.info( "Searching owner with id {}",
+                     ownerId );
         Owner theOwner = this.ownerService.findById( ownerId );
         if( theOwner == null )
         {
+            LOGGER.warn( "Did not found owner with id {}",
+                         ownerId );
             mav.setStatus( HttpStatus.NOT_FOUND );
         } else
         {
+            LOGGER.debug( "Found owner with id {}",
+                          theOwner );
             mav.addObject( theOwner );
         }
 
+        LOGGER.info( "Exiting showOwner method" );
         return mav;
     }
 }

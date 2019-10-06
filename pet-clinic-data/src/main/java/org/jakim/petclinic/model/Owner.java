@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -71,4 +72,35 @@ public class Owner
 
     // TODO: implement Owner equals and hash methods in order
 
+
+    @Override
+    public boolean equals( Object o )
+    {
+        if( this == o )
+        {
+            return true;
+        }
+        if( !( o instanceof Owner ) )
+        {
+            return false;
+        }
+        Owner owner = ( Owner ) o;
+        return Objects.equals( getAddress( ),
+                               owner.getAddress( ) ) &&
+               Objects.equals( getTelephone( ),
+                               owner.getTelephone( ) ) && Objects.equals( getFirstName( ),
+                                                                          owner.getFirstName( ) ) &&
+               Objects.equals( getTelephone( ),
+                               owner.getTelephone( ) ) && Objects.equals( getLastName( ),
+                                                                          owner.getLastName( ) );
+    }
+
+    @Override
+    public int hashCode( )
+    {
+        return Objects.hash( getAddress( ),
+                             getTelephone( ),
+                             getLastName( ),
+                             getFirstName( ) );
+    }
 }
