@@ -236,7 +236,7 @@ class OwnerController2Test
         //Given
         Set<Owner> expectedOwners = getPreparedOwners( );
         ArgumentCaptor<String> args = ArgumentCaptor.forClass( String.class );
-        when( ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( expectedOwners );
+        when( ownerService.findAll( ) ).thenReturn( expectedOwners );
         Owner owner = new Owner( );
         owner.setLastName( null );
 
@@ -247,11 +247,11 @@ class OwnerController2Test
                .andExpect( view( ).name( "owners/ownersList" ) )
                .andExpect( model( ).attribute( "owners",
                                                equalTo( expectedOwners ) ) );
+        verify( this.ownerService ).findAll( );
         verify( this.ownerService,
-                never( ) ).findByLastName( anyString( ) );
+                never( ) ).findAllByLastNameLike( anyString( ) );
         verify( this.ownerService,
-                never( ) ).findAll( );
-        verify( this.ownerService ).findAllByLastNameLike( anyString( ) );
+                never( ) ).findAllByLastNameLike( anyString( ) );
     }
 
     ///////////////////////////// Helpers //////////////////////////////////////

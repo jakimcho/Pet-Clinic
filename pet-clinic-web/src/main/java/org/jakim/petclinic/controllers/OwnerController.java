@@ -66,7 +66,10 @@ public class OwnerController
 
         LOGGER.info( "Searching for owner with last name '{}'",
                      owner.getLastName( ) );
-        Set<Owner> foundOwners = this.ownerService.findAllByLastNameLike( "%" + owner.getLastName( ) + "%");
+        Set<Owner> foundOwners = owner.getLastName( )
+                                      .isEmpty( )
+                                 ? this.ownerService.findAll( )
+                                 : this.ownerService.findAllByLastNameLike( "%" + owner.getLastName( ) + "%" );
         if( foundOwners.isEmpty( ) )
         {
             LOGGER.warn( "Owner with last name {} was not found in the DB",
@@ -75,7 +78,7 @@ public class OwnerController
                                 "notFound",
                                 "not found" );
             mav.setStatus( HttpStatus.NOT_FOUND );
-            mav.setViewName( "owners/ownersList" );
+            mav.setViewName( "owners/index" );
             LOGGER.info( "Exiting processFindForm method" );
             return mav;
         }
@@ -95,7 +98,7 @@ public class OwnerController
 
             mav.addObject( "owners",
                            foundOwners );
-            mav.setViewName( "owners/ownersList" );
+            mav.setViewName( "owners/index" );
         }
 
         LOGGER.info( "Exiting processFindForm method" );
