@@ -172,7 +172,7 @@ class OwnerController2Test
     {
         // Given
         Set<Owner> expectedOwners = getPreparedOwners( );
-        when( this.ownerService.findAllByLastName( anyString( ) ) ).thenReturn( expectedOwners );
+        when( this.ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( expectedOwners );
         //when and then
         mockMvc.perform( get( "/owners/doFind" ) )
                .andExpect( status( ).isOk( ) )
@@ -181,7 +181,7 @@ class OwnerController2Test
                                                equalTo( expectedOwners ) ) );
         verify( this.ownerService,
                 never( ) ).findByLastName( anyString( ) );
-        verify( this.ownerService ).findAllByLastName( anyString( ) );
+        verify( this.ownerService ).findAllByLastNameLike( anyString( ) );
     }
 
     @Test
@@ -196,7 +196,7 @@ class OwnerController2Test
         Set<Owner> expectedOwners = new HashSet<>( );
         expectedOwners.add( owner );
 
-        when( this.ownerService.findAllByLastName( anyString( ) ) ).thenReturn( expectedOwners );
+        when( this.ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( expectedOwners );
         //when and then
         mockMvc.perform( get( "/owners/doFind" ) )
                .andExpect( status( ).is3xxRedirection( ) )
@@ -208,7 +208,7 @@ class OwnerController2Test
                 never( ) ).findByLastName( anyString( ) );
         verify( this.ownerService,
                 never( ) ).findAll( );
-        verify( this.ownerService ).findAllByLastName( anyString( ) );
+        verify( this.ownerService ).findAllByLastNameLike( anyString( ) );
     }
 
     @Test
@@ -216,7 +216,7 @@ class OwnerController2Test
             throws Exception
     {
         // Given
-        when( this.ownerService.findAllByLastName( anyString( ) ) ).thenReturn( Collections.emptySet( ) );
+        when( this.ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( Collections.emptySet( ) );
 
         //when and then
         mockMvc.perform( get( "/owners/doFind" ) )
@@ -226,7 +226,7 @@ class OwnerController2Test
                 never( ) ).findByLastName( anyString( ) );
         verify( this.ownerService,
                 never( ) ).findAll( );
-        verify( this.ownerService ).findAllByLastName( anyString( ) );
+        verify( this.ownerService ).findAllByLastNameLike( anyString( ) );
     }
 
     @Test
@@ -236,7 +236,7 @@ class OwnerController2Test
         //Given
         Set<Owner> expectedOwners = getPreparedOwners( );
         ArgumentCaptor<String> args = ArgumentCaptor.forClass( String.class );
-        when( ownerService.findAllByLastName( anyString( ) ) ).thenReturn( expectedOwners );
+        when( ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( expectedOwners );
         Owner owner = new Owner( );
         owner.setLastName( null );
 
@@ -251,7 +251,7 @@ class OwnerController2Test
                 never( ) ).findByLastName( anyString( ) );
         verify( this.ownerService,
                 never( ) ).findAll( );
-        verify( this.ownerService ).findAllByLastName( anyString( ) );
+        verify( this.ownerService ).findAllByLastNameLike( anyString( ) );
     }
 
     ///////////////////////////// Helpers //////////////////////////////////////

@@ -66,7 +66,7 @@ public class OwnerController
 
         LOGGER.info( "Searching for owner with last name '{}'",
                      owner.getLastName( ) );
-        Set<Owner> foundOwners = this.ownerService.findAllByLastName( owner.getLastName( ) );
+        Set<Owner> foundOwners = this.ownerService.findAllByLastNameLike( "%" + owner.getLastName( ) + "%");
         if( foundOwners.isEmpty( ) )
         {
             LOGGER.warn( "Owner with last name {} was not found in the DB",

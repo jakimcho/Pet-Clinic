@@ -187,14 +187,14 @@ class OwnerJPAService2Test
         //Given
         Set<Owner> expectedOwners = getPreparedOwners( );
         ArgumentCaptor<String> arg = ArgumentCaptor.forClass( String.class );
-        when( ownerRepository.findAllByLastNameIgnoreCase( anyString( ) ) ).thenReturn( expectedOwners );
+        when( ownerRepository.findAllByLastNameLike( anyString( ) ) ).thenReturn( expectedOwners );
 
         //When
-        Set<Owner> actualOwners = this.ownerJPAService.findAllByLastName( "Ivanov" );
+        Set<Owner> actualOwners = this.ownerJPAService.findAllByLastNameLike( "Ivanov" );
 
         //Then
         assertThat( actualOwners ).hasSameElementsAs( expectedOwners );
-        verify( ownerRepository ).findAllByLastNameIgnoreCase( arg.capture( ) );
+        verify( ownerRepository ).findAllByLastNameLike( arg.capture( ) );
         verify( ownerRepository,
                 never( ) ).findByLastName( anyString( ) );
         assertThat( arg.getValue( ) ).isEqualTo( "Ivanov" );
@@ -205,14 +205,14 @@ class OwnerJPAService2Test
     {
         //Given
         ArgumentCaptor<String> arg = ArgumentCaptor.forClass( String.class );
-        when( ownerRepository.findAllByLastNameIgnoreCase( anyString( ) ) ).thenReturn( Collections.emptySet( ) );
+        when( ownerRepository.findAllByLastNameLike( anyString( ) ) ).thenReturn( Collections.emptySet( ) );
 
         //When
-        Set<Owner> actualOwners = this.ownerJPAService.findAllByLastName( "Ivanov" );
+        Set<Owner> actualOwners = this.ownerJPAService.findAllByLastNameLike( "Ivanov" );
 
         //Then
         assertThat( actualOwners ).isEmpty( );
-        verify( ownerRepository ).findAllByLastNameIgnoreCase( arg.capture( ) );
+        verify( ownerRepository ).findAllByLastNameLike( arg.capture( ) );
         verify( ownerRepository,
                 never( ) ).findByLastName( anyString( ) );
         assertThat( arg.getValue( ) ).isEqualTo( "Ivanov" );

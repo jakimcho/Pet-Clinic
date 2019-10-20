@@ -80,7 +80,7 @@ public class OwnerMapService
     }
 
     @Override
-    public Set<Owner> findAllByLastName( String lastName )
+    public Set<Owner> findAllByLastNameLike( String lastName )
     {
         return this.findAll( )
                    .stream( )

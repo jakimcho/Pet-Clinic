@@ -36,10 +36,10 @@ public class OwnerJPAService
     }
 
     @Override
-    public Set<Owner> findAllByLastName( String lastName )
+    public Set<Owner> findAllByLastNameLike( String lastName )
     {
         LOGGER.info( "Inside findAllByLastName method" );
-        Set<Owner> owners = this.ownerRepository.findAllByLastNameIgnoreCase( lastName );
+        Set<Owner> owners = this.ownerRepository.findAllByLastNameLike( lastName );
         LOGGER.debug( "Found {} owners.",
                       owners.size( ) );
         return owners;

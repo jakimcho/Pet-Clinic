@@ -13,6 +13,8 @@ public interface OwnerRepository
 {
     Owner findByLastName( String lastName );
 
+    Set<Owner> findAllByLastNameLike( String lastName );
+
     Set<Owner> findAllByLastNameIgnoreCase( String lastName );
 
 }

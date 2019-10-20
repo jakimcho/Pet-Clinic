@@ -10,5 +10,5 @@ public interface OwnerService
 
     Owner findByLastName( String lastName );
 
-    Set<Owner> findAllByLastName( String lastName );
+    Set<Owner> findAllByLastNameLike( String lastName );
 }
