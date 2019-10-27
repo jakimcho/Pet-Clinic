@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,8 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /*
@@ -176,7 +176,7 @@ class OwnerController2Test
         //when and then
         mockMvc.perform( get( "/owners/doFind" ) )
                .andExpect( status( ).isOk( ) )
-               .andExpect( view( ).name( "owners/ownersList" ) )
+               .andExpect( view( ).name( "owners/index" ) )
                .andExpect( model( ).attribute( "owners",
                                                equalTo( expectedOwners ) ) );
         verify( this.ownerService,
@@ -189,10 +189,7 @@ class OwnerController2Test
             throws Exception
     {
         // Given
-        Owner owner = new Owner( );
-        owner.setId( 1L );
-        owner.setFirstName( "Ivan" );
-        owner.setLastName( "Ivanov" );
+        Owner owner = getAnOwner( );
         Set<Owner> expectedOwners = new HashSet<>( );
         expectedOwners.add( owner );
 
@@ -203,7 +200,7 @@ class OwnerController2Test
                .andExpect( view( ).name( "redirect:/owners/" + owner.getId( ) ) )
                .andExpect( model( ).attribute( "owner",
                                                hasProperty( "lastName",
-                                                            is( "Ivanov" ) ) ) );
+                                                            is( owner.getLastName( ) ) ) ) );
         verify( this.ownerService,
                 never( ) ).findByLastName( anyString( ) );
         verify( this.ownerService,
@@ -219,9 +216,10 @@ class OwnerController2Test
         when( this.ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( Collections.emptySet( ) );
 
         //when and then
-        mockMvc.perform( get( "/owners/doFind" ) )
+        mockMvc.perform( get( "/owners/doFind",
+                              getAnOwner( ) ) )
                .andExpect( status( ).isNotFound( ) )
-               .andExpect( view( ).name( "owners/ownersList" ) );
+               .andExpect( view( ).name( "owners/index" ) );
         verify( this.ownerService,
                 never( ) ).findByLastName( anyString( ) );
         verify( this.ownerService,
@@ -244,7 +242,7 @@ class OwnerController2Test
         mockMvc.perform( get( "/owners/doFind",
                               owner ) )
                .andExpect( status( ).isOk( ) )
-               .andExpect( view( ).name( "owners/ownersList" ) )
+               .andExpect( view( ).name( "owners/index" ) )
                .andExpect( model( ).attribute( "owners",
                                                equalTo( expectedOwners ) ) );
         verify( this.ownerService ).findAll( );
@@ -254,7 +252,87 @@ class OwnerController2Test
                 never( ) ).findAllByLastNameLike( anyString( ) );
     }
 
+    @Test
+    void initCreatingForm( )
+            throws Exception
+    {
+        this.mockMvc.perform( get( "owners/new" ) )
+                    .andExpect( status( ).isOk( ) )
+                    .andExpect( view( ).name( "owners/createOrUpdateForm" ) )
+                    .andExpect( model( ).attributeExists( "owner" ) );
+        verifyZeroInteractions( ownerService );
+    }
+
+    @Test
+    void processCreationForm( )
+            throws Exception
+    {
+        //Given
+        Owner owner = getAnOwner( );
+        ArgumentCaptor<Owner> ownerArgument = ArgumentCaptor.forClass( Owner.class );
+        when( ownerService.save( ArgumentMatchers.any( ) ) ).thenReturn( owner );
+
+        // When and Then
+        this.mockMvc.perform( post( "owners/new" ) )
+                    .andExpect( status( ).is3xxRedirection( ) )
+                    .andExpect( view( ).name( "redirect:/owners/" + owner.getId( ) ) )
+                    .andExpect( model( ).attributeExists( "owner" ) );
+        verify( ownerService ).save( ownerArgument.capture( ) );
+        Owner actualSavedOwner = ownerArgument.getValue( );
+        assertThat( actualSavedOwner,
+                    hasProperty( "id",
+                                 equalTo( owner.getId( ) ) ) );
+    }
+
+    @Test
+    void initUpdateOwnerForm( )
+            throws Exception
+    {
+        //Given
+        Owner owner = getAnOwner( );
+        when( ownerService.findById( anyLong( ) ) ).thenReturn( owner );
+
+        //When and Then
+        this.mockMvc.perform( get( "owners/123/edit" ) )
+                    .andExpect( status( ).isOk( ) )
+                    .andExpect( view( ).name( "owners/createOrUpdateForm" ) )
+                    .andExpect( model( ).attributeExists( "owner" ) );
+        verifyZeroInteractions( ownerService );
+    }
+
+    @Test
+    void processUpdateOwnerForm( )
+            throws Exception
+    {
+        //Given
+        Owner owner = getAnOwner( );
+        ArgumentCaptor<Owner> ownerArgument = ArgumentCaptor.forClass( Owner.class );
+        when( ownerService.save( ArgumentMatchers.any( ) ) ).thenReturn( owner );
+
+        // When and Then
+        this.mockMvc.perform( post( "owners/new" ) )
+                    .andExpect( status( ).is3xxRedirection( ) )
+                    .andExpect( view( ).name( "redirect:/owners/" + owner.getId( ) + "/edit" ) )
+                    .andExpect( model( ).attributeExists( "owner" ) );
+        verify( ownerService ).save( ownerArgument.capture( ) );
+        Owner actualSavedOwner = ownerArgument.getValue( );
+        assertThat( actualSavedOwner,
+                    hasProperty( "id",
+                                 equalTo( owner.getId( ) ) ) );
+
+    }
+
     ///////////////////////////// Helpers //////////////////////////////////////
+
+    private Owner getAnOwner( )
+    {
+        Owner owner = new Owner( );
+        owner.setId( 123L );
+        owner.setFirstName( "Test" );
+        owner.setLastName( "Owner" );
+
+        return owner;
+    }
 
     private Set<Owner> getPreparedOwners( )
     {
