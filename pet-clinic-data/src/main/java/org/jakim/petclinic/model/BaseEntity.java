@@ -14,6 +14,11 @@ public abstract class BaseEntity
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     private Long id;
 
+    public boolean isNew( )
+    {
+        return null == this.id;
+    }
+
     public Long getId( )
     {
         return id;

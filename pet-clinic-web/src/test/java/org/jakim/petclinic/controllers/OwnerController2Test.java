@@ -251,9 +251,9 @@ class OwnerController2Test
     void initCreatingForm( )
             throws Exception
     {
-        this.mockMvc.perform( get( "owners/new" ) )
+        this.mockMvc.perform( get( "/owners/new" ) )
                     .andExpect( status( ).isOk( ) )
-                    .andExpect( view( ).name( "owners/createOrUpdateForm" ) )
+                    .andExpect( view( ).name( "owners/createOrUpdateOwner" ) )
                     .andExpect( model( ).attributeExists( "owner" ) );
         verifyZeroInteractions( ownerService );
     }
@@ -268,15 +268,16 @@ class OwnerController2Test
         when( ownerService.save( ArgumentMatchers.any( ) ) ).thenReturn( owner );
 
         // When and Then
-        this.mockMvc.perform( post( "owners/new" ) )
+        this.mockMvc.perform( post( "/owners/new" ).param( "lastName",
+                                                           owner.getLastName( ) ) )
                     .andExpect( status( ).is3xxRedirection( ) )
                     .andExpect( view( ).name( "redirect:/owners/" + owner.getId( ) ) )
                     .andExpect( model( ).attributeExists( "owner" ) );
         verify( ownerService ).save( ownerArgument.capture( ) );
         Owner actualSavedOwner = ownerArgument.getValue( );
         assertThat( actualSavedOwner,
-                    hasProperty( "id",
-                                 equalTo( owner.getId( ) ) ) );
+                    hasProperty( "lastName",
+                                 equalTo( owner.getLastName( ) ) ) );
     }
 
     @Test
@@ -288,9 +289,9 @@ class OwnerController2Test
         when( ownerService.findById( anyLong( ) ) ).thenReturn( owner );
 
         //When and Then
-        this.mockMvc.perform( get( "owners/123/edit" ) )
+        this.mockMvc.perform( get( "/owners/123/edit" ) )
                     .andExpect( status( ).isOk( ) )
-                    .andExpect( view( ).name( "owners/createOrUpdateForm" ) )
+                    .andExpect( view( ).name( "owners/createOrUpdateOwner" ) )
                     .andExpect( model( ).attributeExists( "owner" ) );
         verifyZeroInteractions( ownerService );
     }
@@ -305,16 +306,16 @@ class OwnerController2Test
         when( ownerService.save( ArgumentMatchers.any( ) ) ).thenReturn( owner );
 
         // When and Then
-        this.mockMvc.perform( post( "owners/new" ) )
+        this.mockMvc.perform( post( "/owners/new" ).param( "lastName",
+                                                           owner.getLastName( ) ) )
                     .andExpect( status( ).is3xxRedirection( ) )
-                    .andExpect( view( ).name( "redirect:/owners/" + owner.getId( ) + "/edit" ) )
+                    .andExpect( view( ).name( "redirect:/owners/" + owner.getId( ) ) )
                     .andExpect( model( ).attributeExists( "owner" ) );
         verify( ownerService ).save( ownerArgument.capture( ) );
         Owner actualSavedOwner = ownerArgument.getValue( );
         assertThat( actualSavedOwner,
-                    hasProperty( "id",
-                                 equalTo( owner.getId( ) ) ) );
-
+                    hasProperty( "lastName",
+                                 equalTo( owner.getLastName( ) ) ) );
     }
 
     ///////////////////////////// Helpers //////////////////////////////////////

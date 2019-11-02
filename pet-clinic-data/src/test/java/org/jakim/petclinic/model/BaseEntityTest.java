@@ -3,16 +3,31 @@ package org.jakim.petclinic.model;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public abstract class BaseEntityTest<T extends BaseEntity>
+abstract class BaseEntityTest<T extends BaseEntity>
 {
-    protected T entity;
+    T entity;
 
     @Test
-    public void getId( )
+    void getId( )
     {
         entity.setId( 1L );
-
         Assertions.assertThat( this.entity.getId( ) )
                   .isEqualTo( 1L );
+    }
+
+    @Test
+    void checkThatOwnerIsNew( )
+    {
+        entity.setId( null );
+        Assertions.assertThat( this.entity.isNew( ) )
+                  .isTrue( );
+    }
+
+    @Test
+    void checkThatOwnerIsNotNewNew( )
+    {
+        entity.setId( 1L );
+        Assertions.assertThat( this.entity.isNew( ) )
+                  .isFalse( );
     }
 }
