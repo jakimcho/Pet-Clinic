@@ -174,13 +174,14 @@ class OwnerController2Test
         Set<Owner> expectedOwners = getPreparedOwners( );
         when( this.ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( expectedOwners );
         //when and then
-        mockMvc.perform( get( "/owners/doFind" ) )
+        mockMvc.perform( get( "/owners/doFind" ).param( "lastName",
+                                                        "gosho" ) )
                .andExpect( status( ).isOk( ) )
                .andExpect( view( ).name( "owners/index" ) )
                .andExpect( model( ).attribute( "owners",
                                                equalTo( expectedOwners ) ) );
         verify( this.ownerService,
-                never( ) ).findByLastName( anyString( ) );
+                never( ) ).findAll( );
         verify( this.ownerService ).findAllByLastNameLike( anyString( ) );
     }
 
@@ -195,14 +196,13 @@ class OwnerController2Test
 
         when( this.ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( expectedOwners );
         //when and then
-        mockMvc.perform( get( "/owners/doFind" ) )
+        mockMvc.perform( get( "/owners/doFind" ).param( "lastName",
+                                                        "gosho" ) )
                .andExpect( status( ).is3xxRedirection( ) )
                .andExpect( view( ).name( "redirect:/owners/" + owner.getId( ) ) )
                .andExpect( model( ).attribute( "owner",
                                                hasProperty( "lastName",
                                                             is( owner.getLastName( ) ) ) ) );
-        verify( this.ownerService,
-                never( ) ).findByLastName( anyString( ) );
         verify( this.ownerService,
                 never( ) ).findAll( );
         verify( this.ownerService ).findAllByLastNameLike( anyString( ) );
@@ -216,12 +216,10 @@ class OwnerController2Test
         when( this.ownerService.findAllByLastNameLike( anyString( ) ) ).thenReturn( Collections.emptySet( ) );
 
         //when and then
-        mockMvc.perform( get( "/owners/doFind",
-                              getAnOwner( ) ) )
+        mockMvc.perform( get( "/owners/doFind" ).param( "lastName",
+                                                        "Gosho" ) )
                .andExpect( status( ).isNotFound( ) )
                .andExpect( view( ).name( "owners/index" ) );
-        verify( this.ownerService,
-                never( ) ).findByLastName( anyString( ) );
         verify( this.ownerService,
                 never( ) ).findAll( );
         verify( this.ownerService ).findAllByLastNameLike( anyString( ) );
@@ -239,15 +237,12 @@ class OwnerController2Test
         owner.setLastName( null );
 
         //when and then
-        mockMvc.perform( get( "/owners/doFind",
-                              owner ) )
+        mockMvc.perform( get( "/owners/doFind" ) )
                .andExpect( status( ).isOk( ) )
                .andExpect( view( ).name( "owners/index" ) )
                .andExpect( model( ).attribute( "owners",
                                                equalTo( expectedOwners ) ) );
         verify( this.ownerService ).findAll( );
-        verify( this.ownerService,
-                never( ) ).findAllByLastNameLike( anyString( ) );
         verify( this.ownerService,
                 never( ) ).findAllByLastNameLike( anyString( ) );
     }

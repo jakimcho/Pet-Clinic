@@ -40,7 +40,6 @@ public class OwnerController
         return "owners/index";
     }
 
-
     @GetMapping( { "/find", "/find/" } )
     public ModelAndView findOwner( )
     {
