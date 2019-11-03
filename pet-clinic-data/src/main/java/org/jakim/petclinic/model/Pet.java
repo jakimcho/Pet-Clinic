@@ -1,5 +1,7 @@
 package org.jakim.petclinic.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -19,7 +21,9 @@ public class Pet
     @JoinColumn( name = "owner_id" )
     private Owner owner;
 
+    @DateTimeFormat( pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+
     @OneToMany( cascade = CascadeType.ALL,
                 mappedBy = "pet" )
     private Set<Visit> visits = new HashSet<>( );

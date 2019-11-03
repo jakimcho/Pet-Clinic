@@ -41,7 +41,7 @@ public class PetController
         this.petTypeService = petTypeService;
     }
 
-    @ModelAttribute( "petTypes" )
+    @ModelAttribute( "types" )
     public Set<PetType> populatePetTypes( )
     {
         return this.petTypeService.findAll( );
@@ -113,7 +113,7 @@ public class PetController
     public String processUpdateForm( Owner owner,
                                      @Valid Pet pet,
                                      BindingResult result,
-                                     Model model)
+                                     Model model )
     {
         if( result.hasErrors( ) )
         {
