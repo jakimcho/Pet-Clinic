@@ -155,8 +155,7 @@ public class OwnerController
     }
 
     @GetMapping( "/{ownerId}/edit" )
-    public ModelAndView initUpdateForm( @PathVariable( "ownerId" ) Long ownerId,
-                                        ModelAndView mov )
+    public ModelAndView initUpdateForm( @PathVariable( "ownerId" ) Long ownerId )
     {
         ModelAndView mav = new ModelAndView( );
         Owner owner = this.ownerService.findById( ownerId );
