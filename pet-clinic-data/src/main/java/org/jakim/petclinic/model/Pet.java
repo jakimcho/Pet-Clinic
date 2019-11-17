@@ -78,4 +78,9 @@ public class Pet
         this.visits = visits;
     }
 
+    public void addVisit(final Visit visit )
+    {
+        this.visits.add( visit );
+        visit.setPet( this );
+    }
 }
