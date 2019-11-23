@@ -6,19 +6,19 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-public class VisitTest
+class VisitTest
         extends BaseEntityTest<Visit>
 {
 
     @BeforeEach
-    public void setUp( )
+    void setUp( )
             throws Exception
     {
         this.entity = new Visit( );
     }
 
     @Test
-    public void getDate( )
+    void getDate( )
     {
         LocalDate date = LocalDate.now( )
                                   .plusDays( 3 );
@@ -29,7 +29,7 @@ public class VisitTest
     }
 
     @Test
-    public void getDescription( )
+    void getDescription( )
     {
         String description = "Routine check";
         this.entity.setDescription( description );
@@ -39,7 +39,7 @@ public class VisitTest
     }
 
     @Test
-    public void getPet( )
+    void getPet( )
     {
         Pet thePet = new Pet( );
         thePet.setId( 1l );

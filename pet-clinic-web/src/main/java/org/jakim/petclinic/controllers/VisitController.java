@@ -44,11 +44,9 @@ public class VisitController
     }
 
     @GetMapping( "/owners/*/pets/{petId}/visits/new" )
-    public ModelAndView initNewVisitForm( @PathVariable( "petId" ) long petI,
-                                          ModelAndView mav )
+    public String initNewVisitForm( @PathVariable( "petId" ) long petI )
     {
-        mav.setViewName( "pets/createOrUpdateVisitForm" );
-        return mav;
+        return "pets/createOrUpdateVisitForm";
     }
 
     @PostMapping( "/owners/*/pets/{petId}/visits/new" )

@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith( MockitoExtension.class )
 class OwnerController2Test
 {
-
     @InjectMocks
     OwnerController ownerController;
 
