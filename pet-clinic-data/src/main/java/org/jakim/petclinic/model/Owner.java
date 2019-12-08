@@ -3,9 +3,7 @@ package org.jakim.petclinic.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.swing.*;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -74,6 +72,7 @@ public class Owner
     {
        return this.getPet( name, false );
     }
+
     public Pet getPet( String name,
                        boolean ignoreNew )
     {
