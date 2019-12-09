@@ -1,5 +1,6 @@
 package org.jakim.petclinic.model;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -116,6 +117,14 @@ class OwnerTest
         assertThat( actualPet ).as( "Lili id is 2l" )
                                .hasFieldOrPropertyWithValue( "id",
                                                              2l );
+    }
+
+    @Test
+    void toStringTest( )
+    {
+        this.entity.setFirstName( "Gosho" );
+        this.entity.setLastName( "Ivanow" );
+        Assertions.assertThat( this.entity.toString( ) ).contains( "{firstName='Gosho', lastName='Ivanow'}" );
     }
 
     @Test

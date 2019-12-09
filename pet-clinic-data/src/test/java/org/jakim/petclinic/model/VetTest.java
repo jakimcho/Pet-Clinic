@@ -1,5 +1,6 @@
 package org.jakim.petclinic.model;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,5 +37,25 @@ public class VetTest
         assertThat( entity.getSpecialties( ) ).hasSize( 2 );
         assertThat( entity.getSpecialties( ) ).containsExactlyInAnyOrder( s1,
                                                                           s2 );
+    }
+
+    @Test
+    void addSpecialty( )
+    {
+        Specialty expectedSpecialty = new Specialty( );
+        expectedSpecialty.setId( 11L );
+        this.entity.addSpecialty( expectedSpecialty );
+
+        Assertions.assertThat( entity.getSpecialties( ) )
+                  .contains( expectedSpecialty );
+    }
+
+    @Test
+    void toStringTest( )
+    {
+        this.entity.setFirstName( "Lila" );
+        this.entity.setLastName( "Ivanowa" );
+        Assertions.assertThat( this.entity.toString( ) )
+                  .contains( "{firstName='Lila', lastName='Ivanowa'}" );
     }
 }

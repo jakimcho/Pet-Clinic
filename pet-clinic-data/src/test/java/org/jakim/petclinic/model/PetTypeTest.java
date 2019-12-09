@@ -1,36 +1,35 @@
 package org.jakim.petclinic.model;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PetTypeTest
+        extends BaseEntityTest<PetType>
 {
-
-    private PetType petType;
 
     @BeforeEach
     public void setUp( )
-            throws Exception
     {
-        this.petType = new PetType( );
+        this.entity = new PetType( );
     }
 
     @Test
-    public void getId( )
+    void toStringTest( )
     {
-        petType.setId( 1l );
-
-        assertThat( this.petType.getId( ) ).isEqualTo( 1l );
+        entity.setName( "Dog" );
+        Assertions.assertThat( this.entity.toString( ) )
+                  .contains( "Dog" );
     }
 
     @Test
     public void getName( )
     {
         String theName = "Dog";
-        petType.setName( theName );
+        entity.setName( theName );
 
-        assertThat( this.petType.getName( ) ).isEqualTo( theName );
+        assertThat( this.entity.getName( ) ).isEqualTo( theName );
     }
 }

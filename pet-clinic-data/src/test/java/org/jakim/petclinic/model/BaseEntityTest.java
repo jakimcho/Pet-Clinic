@@ -30,4 +30,11 @@ abstract class BaseEntityTest<T extends BaseEntity>
         Assertions.assertThat( this.entity.isNew( ) )
                   .isFalse( );
     }
+
+    @Test
+    void toStringTest( )
+    {
+        entity.setId( 1L );
+        Assertions.assertThat( this.entity.toString() ).contains( "BaseEntity{id=1}" );
+    }
 }
