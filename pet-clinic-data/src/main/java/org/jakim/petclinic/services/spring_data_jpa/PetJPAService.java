@@ -53,10 +53,10 @@ public class PetJPAService
     public Pet save( final Pet pet )
     {
         PetType petType = pet.getPetType( );
-        System.out.println("Trying to save Pet of type " + petType.toString() );
+        System.out.println( "Trying to save Pet of type " + petType.toString( ) );
         if( petType.getId( ) == null )
         {
-            petTypeService.save( petType );
+            pet.setPetType( petTypeService.save( petType ) );
         }
 
         return this.petRepository.save( pet );
