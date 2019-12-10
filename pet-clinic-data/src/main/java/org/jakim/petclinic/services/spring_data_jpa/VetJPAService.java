@@ -54,8 +54,7 @@ public class VetJPAService
     @Override
     public Vet save( final Vet vet )
     {
-        for( Specialty specialty : vet.getSpecialties( )
-        )
+        for( Specialty specialty : vet.getSpecialties( ) )
         {
             if( specialty.getId( ) == null )
             {
