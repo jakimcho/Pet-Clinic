@@ -140,6 +140,29 @@ class VetJPAServiceTest
     }
 
     @Test
+    void save_withSavedSpecialties( )
+    {
+        //Given
+        Vet expectedVet = new Vet( );
+        expectedVet.setId( 1L );
+        expectedVet.setFirstName( "Ivan" );
+        Specialty expectedSpecialty = new Specialty( );
+        expectedSpecialty.setId( 1L );
+        expectedVet.addSpecialty( expectedSpecialty );
+        when( vetRepository.save( any( Vet.class ) ) ).thenReturn( expectedVet );
+        ArgumentCaptor<Vet> argumentCaptor = ArgumentCaptor.forClass( Vet.class );
+
+        //When
+        Vet actualVet = vetJPAService.save( expectedVet );
+
+        //Then
+        assertThat( actualVet ).isEqualTo( expectedVet );
+        verify( vetRepository ).save( argumentCaptor.capture( ) );
+        verify( specialtiesService, never() ).save( any( Specialty.class ));
+        assertThat( argumentCaptor.getValue( ) ).isEqualTo( expectedVet );
+    }
+
+    @Test
     void deleteById( )
     {
         //Given

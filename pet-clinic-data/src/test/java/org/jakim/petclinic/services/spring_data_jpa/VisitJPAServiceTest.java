@@ -18,6 +18,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.IterableUtil.sizeOf;
+import static org.jakim.petclinic.services.spring_data_jpa.VisitJPAService.verifyVisitPet;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyIterable;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -145,6 +146,41 @@ class VisitJPAServiceTest
 
         //Then
         assertThat( exception.getMessage( ) ).isEqualTo( "No such pet in the data base" );
+    }
+
+    @Test
+    void verifyVisitPet_noPet( )
+    {
+        //Given
+        Visit expectedVisit = new Visit( );
+        expectedVisit.setId( 1L );
+        Pet pet = new Pet( ); // Pet does not have id so it does not exist in the DB
+        expectedVisit.setPet( pet );
+
+        //When
+        Exception exception = assertThrows( RuntimeException.class,
+                                            ( ) -> verifyVisitPet( expectedVisit ) );
+
+        //Then
+        assertThat( exception.getMessage( ) ).isEqualTo( "No such pet in the data base" );
+    }
+
+    @Test
+    void verifyVisitPet_homelessPet( )
+    {
+        //Given
+        Visit expectedVisit = new Visit( );
+        expectedVisit.setId( 1L );
+        Pet pet = new Pet( );
+        pet.setId( 1L );
+        expectedVisit.setPet( pet );
+
+        //When
+        Exception exception = assertThrows( RuntimeException.class,
+                                            ( ) -> verifyVisitPet( expectedVisit ) );
+
+        //Then
+        assertThat( exception.getMessage( ) ).isEqualTo( "The pet is homeless" );
     }
 
     @Test
