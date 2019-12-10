@@ -49,7 +49,7 @@ public class PetTypeJPAService
     public PetType save( final PetType petType )
     {
         LOGGER.info( "saving pet type {}",
-                     petType.toString( ) );
+                     petType );
         return this.petTypeRepository.save( petType );
     }
 
