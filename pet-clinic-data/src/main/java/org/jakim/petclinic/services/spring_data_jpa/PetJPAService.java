@@ -5,6 +5,8 @@ import org.jakim.petclinic.model.PetType;
 import org.jakim.petclinic.repositories.PetRepository;
 import org.jakim.petclinic.services.PetService;
 import org.jakim.petclinic.services.PetTypeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import java.util.Set;
 public class PetJPAService
         implements PetService
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger( PetJPAService.class );
     private final PetRepository petRepository;
 
     private final PetTypeService petTypeService;
@@ -29,7 +32,7 @@ public class PetJPAService
     {
         this.petRepository = petRepository;
         this.petTypeService = petTypeService;
-        System.out.println( "PetServiceJPA loaded" );
+        LOGGER.info( "PetServiceJPA loaded" );
     }
 
     @Override
@@ -53,7 +56,8 @@ public class PetJPAService
     public Pet save( final Pet pet )
     {
         PetType petType = pet.getPetType( );
-        System.out.println( "Trying to save Pet of type " + petType.toString( ) );
+        LOGGER.info( "Trying to save Pet of type {}",
+                     petType.toString( ) );
         if( petType.getId( ) == null )
         {
             pet.setPetType( petTypeService.save( petType ) );
