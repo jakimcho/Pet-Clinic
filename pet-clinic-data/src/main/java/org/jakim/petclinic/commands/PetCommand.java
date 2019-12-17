@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.jakim.petclinic.model.Owner;
 import org.jakim.petclinic.model.PetType;
 import org.jakim.petclinic.model.Visit;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.HashSet;
