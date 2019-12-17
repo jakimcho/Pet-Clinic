@@ -14,20 +14,16 @@ import java.util.Set;
 /**
  * Created by jakim on 17.12.19 г.
  */
+@Getter
+@Setter
 public class PetCommand
 {
-    @Getter @Setter
+
     private long id;
-    @Getter @Setter
     private String name;
-    @Getter @Setter
     private PetType petType;
-    @Getter @Setter
     private Owner owner;
-    @Getter @Setter
     private Set<Visit> visits = new HashSet<>( );
-    @DateTimeFormat( pattern = "yyyy-MM-dd" )
-    @Getter @Setter
     private LocalDate birthDate;
 
 }
