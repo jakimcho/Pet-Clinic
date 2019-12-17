@@ -1,6 +1,9 @@
 package org.jakim.petclinic.controllers;
 
+import org.jakim.petclinic.commands.OwnerCommand;
 import org.jakim.petclinic.commands.PetCommand;
+import org.jakim.petclinic.convertors.OwnerCommandToOwner;
+import org.jakim.petclinic.convertors.OwnerToOwnerCommand;
 import org.jakim.petclinic.convertors.PetCommandToPet;
 import org.jakim.petclinic.convertors.PetToCommandPet;
 import org.jakim.petclinic.model.Owner;
@@ -48,6 +51,12 @@ class PetControllerTest
     @Mock
     PetToCommandPet petToCommandPet;
 
+    @Mock
+    OwnerToOwnerCommand ownerToOwnerCommand;
+
+    @Mock
+    OwnerCommandToOwner ownerCommandToOwner;
+
     @InjectMocks
     PetController petController;
 
@@ -59,6 +68,9 @@ class PetControllerTest
     {
         mockMvc = MockMvcBuilders.standaloneSetup( this.petController )
                                  .build( );
+        OwnerCommand ownerCommand = new OwnerCommand( );
+        ownerCommand.setId( 1L );
+        when( ownerToOwnerCommand.convert( any( Owner.class ) ) ).thenReturn( ownerCommand );
     }
 
     @Test
@@ -67,6 +79,7 @@ class PetControllerTest
     {
         //Given
         Owner owner = getOwner( );
+        when( ownerCommandToOwner.convert( any( OwnerCommand.class ) ) ).thenReturn( owner );
         when( ownerService.findById( anyLong( ) ) ).thenReturn( owner );
 
         //When Then
@@ -84,6 +97,7 @@ class PetControllerTest
     {
         //Given
         Owner owner = getOwner( );
+        when( ownerCommandToOwner.convert( any( OwnerCommand.class ) ) ).thenReturn( owner );
         Pet pet = new Pet( );
         pet.setId( 3L );
         PetCommand petCommand = new PetCommand( );
@@ -134,6 +148,7 @@ class PetControllerTest
     {
         //Given
         Owner owner = getOwner( );
+        when( ownerCommandToOwner.convert( any( OwnerCommand.class ) ) ).thenReturn( owner );
         Pet pet = new Pet( );
         pet.setId( 3L );
         pet.setName( "Ivanka" );

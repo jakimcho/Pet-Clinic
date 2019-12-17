@@ -1,5 +1,8 @@
 package org.jakim.petclinic.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -10,55 +13,23 @@ import java.util.Set;
 public class Owner
         extends Person
 {
+    @Getter
+    @Setter
     private String address;
 
+    @Getter
+    @Setter
     private String city;
 
+    @Getter
+    @Setter
     private String telephone;
 
     @OneToMany( cascade = CascadeType.ALL,
                 mappedBy = "owner" )
+    @Getter
+    @Setter
     private Set<Pet> pets = new HashSet<>( );
-
-    public String getAddress( )
-    {
-        return address;
-    }
-
-    public void setAddress( String address )
-    {
-        this.address = address;
-    }
-
-    public String getCity( )
-    {
-        return city;
-    }
-
-    public void setCity( String city )
-    {
-        this.city = city;
-    }
-
-    public String getTelephone( )
-    {
-        return telephone;
-    }
-
-    public void setTelephone( String telephone )
-    {
-        this.telephone = telephone;
-    }
-
-    public Set<Pet> getPets( )
-    {
-        return pets;
-    }
-
-    public void setPets( Set<Pet> pets )
-    {
-        this.pets = pets;
-    }
 
     public Owner addPet( final Pet pet )
     {
@@ -70,7 +41,8 @@ public class Owner
 
     public Pet getPet( String name )
     {
-       return this.getPet( name, false );
+        return this.getPet( name,
+                            false );
     }
 
     public Pet getPet( String name,

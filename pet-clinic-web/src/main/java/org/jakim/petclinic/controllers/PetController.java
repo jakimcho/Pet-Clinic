@@ -1,6 +1,9 @@
 package org.jakim.petclinic.controllers;
 
+import org.jakim.petclinic.commands.OwnerCommand;
 import org.jakim.petclinic.commands.PetCommand;
+import org.jakim.petclinic.convertors.OwnerCommandToOwner;
+import org.jakim.petclinic.convertors.OwnerToOwnerCommand;
 import org.jakim.petclinic.convertors.PetCommandToPet;
 import org.jakim.petclinic.convertors.PetToCommandPet;
 import org.jakim.petclinic.model.Owner;
@@ -36,18 +39,24 @@ public class PetController
     private final PetTypeService petTypeService;
     private final PetCommandToPet petCommandToPet;
     private final PetToCommandPet petToCommandPet;
+    private final OwnerToOwnerCommand ownerToOwnerCommand;
+    private final OwnerCommandToOwner ownerCommandToOwner;
 
     public PetController( PetService petService,
                           OwnerService ownerService,
                           PetTypeService petTypeService,
                           PetCommandToPet petCommandToPet,
-                          PetToCommandPet petToCommandPet )
+                          PetToCommandPet petToCommandPet,
+                          OwnerToOwnerCommand ownerToOwnerCommand,
+                          OwnerCommandToOwner ownerCommandToOwner )
     {
         this.petService = petService;
         this.ownerService = ownerService;
         this.petTypeService = petTypeService;
         this.petCommandToPet = petCommandToPet;
         this.petToCommandPet = petToCommandPet;
+        this.ownerToOwnerCommand = ownerToOwnerCommand;
+        this.ownerCommandToOwner = ownerCommandToOwner;
     }
 
     @ModelAttribute( "types" )
@@ -57,9 +66,10 @@ public class PetController
     }
 
     @ModelAttribute( "owner" )
-    public Owner populatePetTypes( @PathVariable Long ownerId )
+    public OwnerCommand populatePetTypes( @PathVariable Long ownerId )
     {
-        return this.ownerService.findById( ownerId );
+        Owner owner = this.ownerService.findById( ownerId );
+        return ownerToOwnerCommand.convert( owner );
     }
 
     @InitBinder( "owner" )
@@ -69,10 +79,11 @@ public class PetController
     }
 
     @GetMapping( "/pets/new" )
-    public ModelAndView initCreationForm( Owner owner,
+    public ModelAndView initCreationForm( OwnerCommand ownerCommand,
                                           ModelAndView mov )
     {
         Pet pet = new Pet( );
+        Owner owner = ownerCommandToOwner.convert( ownerCommand );
         owner.addPet( pet );
         mov.addObject( pet );
         mov.setViewName( PETS_CREATE_OR_UPDATE_PET_FORM );
@@ -80,13 +91,14 @@ public class PetController
     }
 
     @PostMapping( "/pets/new" )
-    public String processCreationForm( Owner owner,
+    public String processCreationForm( OwnerCommand ownerCommand,
                                        @Valid PetCommand petCommand,
                                        BindingResult result,
                                        Model model )
     {
 
         Pet pet = petCommandToPet.convert( petCommand );
+        Owner owner = ownerCommandToOwner.convert( ownerCommand );
         if( StringUtils.hasLength( pet.getName( ) ) && pet.isNew( ) && owner.getPet( pet.getName( ),
                                                                                      true ) != null )
         {
@@ -124,11 +136,12 @@ public class PetController
     }
 
     @PostMapping( { "/pets/{petId}/edit" } )
-    public String processUpdateForm( Owner owner,
+    public String processUpdateForm( OwnerCommand ownerCommand,
                                      @Valid PetCommand petCommand,
                                      BindingResult result,
                                      Model model )
     {
+        Owner owner = ownerCommandToOwner.convert( ownerCommand );
         Pet pet = petCommandToPet.convert( petCommand );
         if( result.hasErrors( ) )
         {
@@ -137,7 +150,7 @@ public class PetController
             return PETS_CREATE_OR_UPDATE_PET_FORM;
         } else
         {
-            Pet savedPet = this.petService.save( pet );
+            pet = this.petService.save( pet );
             PetCommand savedPetCommand = petToCommandPet.convert( pet );
             owner.addPet( pet );
             model.asMap( )
