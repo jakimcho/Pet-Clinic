@@ -7,12 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RequestMapping( "/vets" )
 @Controller
 public class VetController
 {
@@ -24,7 +23,7 @@ public class VetController
         this.vetService = vetService;
     }
 
-    @GetMapping( { "/", "" } )
+    @GetMapping( { "/vets/", "/vets" } )
     public String listVets( Model model )
     {
         LOGGER.info( "Inside listVets method" );
@@ -38,5 +37,12 @@ public class VetController
 
         LOGGER.info( "Exiting listVets method" );
         return "vets/index";
+    }
+
+    @GetMapping( "/api/vets" )
+    public @ResponseBody
+    Set<Vet> getVetsJSON( )
+    {
+        return vetService.findAll( );
     }
 }
