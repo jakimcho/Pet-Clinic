@@ -1,5 +1,8 @@
 package org.jakim.petclinic.controllers;
 
+import org.jakim.petclinic.commands.PetCommand;
+import org.jakim.petclinic.convertors.PetCommandToPet;
+import org.jakim.petclinic.convertors.PetToCommandPet;
 import org.jakim.petclinic.model.Owner;
 import org.jakim.petclinic.model.Pet;
 import org.jakim.petclinic.model.PetType;
@@ -20,7 +23,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,6 +41,12 @@ class PetControllerTest
 
     @Mock
     private OwnerService ownerService;
+
+    @Mock
+    PetCommandToPet petCommandToPet;
+
+    @Mock
+    PetToCommandPet petToCommandPet;
 
     @InjectMocks
     PetController petController;
@@ -74,9 +84,14 @@ class PetControllerTest
     {
         //Given
         Owner owner = getOwner( );
+        Pet pet = new Pet( );
+        pet.setId( 3L );
+        PetCommand petCommand = new PetCommand( );
+        petCommand.setId( 3l );
         when( ownerService.findById( anyLong( ) ) ).thenReturn( owner );
-        when( petService.save( any( ) ) ).thenReturn( getPets( ).iterator( )
-                                                                .next( ) );
+        when( petService.save( any( ) ) ).thenReturn( pet );
+        when( petCommandToPet.convert( any( ) ) ).thenReturn( pet );
+        when( petToCommandPet.convert( any( ) ) ).thenReturn( petCommand );
 
         //When Then
         this.mockMvc.perform( post( "/owners/" +
@@ -88,6 +103,8 @@ class PetControllerTest
 
         verify( ownerService ).findById( any( ) );
         verify( petService ).save( any( ) );
+        verify( petCommandToPet ).convert( any( ) );
+        verify( petToCommandPet ).convert( any( ) );
     }
 
     @Test
@@ -117,10 +134,16 @@ class PetControllerTest
     {
         //Given
         Owner owner = getOwner( );
-        Pet pet = getPets( ).iterator( )
-                            .next( );
+        Pet pet = new Pet( );
+        pet.setId( 3L );
+        pet.setName( "Ivanka" );
+        PetCommand petCommand = new PetCommand( );
+        petCommand.setId( 3l );
         when( ownerService.findById( anyLong( ) ) ).thenReturn( owner );
         when( petService.save( any( ) ) ).thenReturn( pet );
+
+        when( petCommandToPet.convert( any( ) ) ).thenReturn( pet );
+        when( petToCommandPet.convert( any( ) ) ).thenReturn( petCommand );
         ArgumentCaptor<Pet> petArgument = ArgumentCaptor.forClass( Pet.class );
 
         //When Then
@@ -138,6 +161,9 @@ class PetControllerTest
         assertThat( petArgument.getValue( ),
                     hasProperty( "name",
                                  equalTo( "Ivanka" ) ) );
+
+        verify( petCommandToPet ).convert( any( ) );
+        verify( petToCommandPet ).convert( any( ) );
     }
 
     private Set<Pet> getPets( )

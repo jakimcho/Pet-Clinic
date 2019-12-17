@@ -1,5 +1,8 @@
 package org.jakim.petclinic.controllers;
 
+import org.jakim.petclinic.commands.PetCommand;
+import org.jakim.petclinic.convertors.PetCommandToPet;
+import org.jakim.petclinic.convertors.PetToCommandPet;
 import org.jakim.petclinic.model.Owner;
 import org.jakim.petclinic.model.Pet;
 import org.jakim.petclinic.model.PetType;
@@ -31,14 +34,20 @@ public class PetController
     private final PetService petService;
     private final OwnerService ownerService;
     private final PetTypeService petTypeService;
+    private final PetCommandToPet petCommandToPet;
+    private final PetToCommandPet petToCommandPet;
 
     public PetController( PetService petService,
                           OwnerService ownerService,
-                          PetTypeService petTypeService )
+                          PetTypeService petTypeService,
+                          PetCommandToPet petCommandToPet,
+                          PetToCommandPet petToCommandPet )
     {
         this.petService = petService;
         this.ownerService = ownerService;
         this.petTypeService = petTypeService;
+        this.petCommandToPet = petCommandToPet;
+        this.petToCommandPet = petToCommandPet;
     }
 
     @ModelAttribute( "types" )
@@ -72,11 +81,12 @@ public class PetController
 
     @PostMapping( "/pets/new" )
     public String processCreationForm( Owner owner,
-                                       @Valid Pet pet,
+                                       @Valid PetCommand petCommand,
                                        BindingResult result,
                                        Model model )
     {
 
+        Pet pet = petCommandToPet.convert( petCommand );
         if( StringUtils.hasLength( pet.getName( ) ) && pet.isNew( ) && owner.getPet( pet.getName( ),
                                                                                      true ) != null )
         {
@@ -88,20 +98,24 @@ public class PetController
         if( result.hasErrors( ) )
         {
             model.addAttribute( "pet",
-                                pet );
+                                petCommand );
             return PETS_CREATE_OR_UPDATE_PET_FORM;
         } else
         {
+            pet = this.petService.save( pet );
+            PetCommand savedPetCommand = petToCommandPet.convert( pet );
             owner.addPet( pet );
-            Pet savedPet = this.petService.save( pet );
+            model.asMap( )
+                 .remove( "PetCommand" );
+            model.addAttribute( "pet",
+                                savedPetCommand );
             return "redirect:/owners/" + owner.getId( );
         }
     }
 
 
     @GetMapping( "/pets/{petId}/edit" )
-    public ModelAndView initUpdateForm( Owner owner,
-                                        @PathVariable Long petId,
+    public ModelAndView initUpdateForm( @PathVariable Long petId,
                                         ModelAndView mov )
     {
         mov.addObject( petService.findById( petId ) );
@@ -111,19 +125,25 @@ public class PetController
 
     @PostMapping( { "/pets/{petId}/edit" } )
     public String processUpdateForm( Owner owner,
-                                     @Valid Pet pet,
+                                     @Valid PetCommand petCommand,
                                      BindingResult result,
                                      Model model )
     {
+        Pet pet = petCommandToPet.convert( petCommand );
         if( result.hasErrors( ) )
         {
             model.addAttribute( "pet",
-                                pet );
+                                petCommand );
             return PETS_CREATE_OR_UPDATE_PET_FORM;
         } else
         {
-            owner.addPet( pet );
             Pet savedPet = this.petService.save( pet );
+            PetCommand savedPetCommand = petToCommandPet.convert( pet );
+            owner.addPet( pet );
+            model.asMap( )
+                 .remove( "PetCommand" );
+            model.addAttribute( "pet",
+                                savedPetCommand );
             return "redirect:/owners/" + owner.getId( );
         }
     }
